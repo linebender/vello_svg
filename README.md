@@ -7,7 +7,8 @@
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
 [![(MIT/Apache 2.0)+MPL 2.0](https://img.shields.io/badge/license-(MIT%2FApache)+MPL2-blue.svg)](#license)
-[![vello version](https://img.shields.io/badge/vello-v0.1.0-orange.svg)](https://crates.io/crates/vello)
+[![wgpu version](https://img.shields.io/badge/wgpu-v0.19-orange.svg)](https://crates.io/crates/wgpu)
+[![vello version](https://img.shields.io/badge/vello-v0.1.0-purple.svg)](https://crates.io/crates/vello)
 
 [![Crates.io](https://img.shields.io/crates/v/vello_svg.svg)](https://crates.io/crates/vello_svg)
 [![Docs](https://docs.rs/vello_svg/badge.svg)](https://docs.rs/vello_svg)
