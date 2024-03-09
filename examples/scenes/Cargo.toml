@@ -1,6 +1,6 @@
 [package]
 name = "scenes"
-description = "Vello scenes used in the other examples."
+description = "Scenes used in the other examples."
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
@@ -18,5 +18,5 @@ instant = "0.1"
 # Used for the `download` command
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 byte-unit = "4.0.19"
-inquire = "*"
+inquire = "0.7"
 ureq = "2.9.6"
