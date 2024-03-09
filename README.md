@@ -1,17 +1,18 @@
 # vello_svg
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
-[![dependency status](https://deps.rs/repo/github/linebender/vello/status.svg)](https://deps.rs/repo/github/linebender/vello)
-[![MIT/Apache 2.0+MPL 2.0](https://img.shields.io/badge/license-MIT%2FApache+MPL2-blue.svg)](#license)
-[![Build status](https://github.com/linebender/vello/workflows/CI/badge.svg)](https://github.com/linebender/vello/actions)
-<!-- [![Crates.io](https://img.shields.io/crates/v/vello.svg)](https://crates.io/crates/vello) -->
-<!-- [![Docs](https://docs.rs/vello/badge.svg)](https://docs.rs/vello) -->
+[![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
+[![(MIT/Apache 2.0)+MPL 2.0](https://img.shields.io/badge/license-(MIT%2FApache)+MPL2-blue.svg)](#license)
+[![Build status](https://github.com/linebender/vello_svg/workflows/CI/badge.svg)](https://github.com/linebender/vello_svg/actions)
+[![Crates.io](https://img.shields.io/crates/v/vello_svg.svg)](https://crates.io/crates/vello_svg)
+[![Docs](https://docs.rs/vello_svg/badge.svg)](https://docs.rs/vello_svg)
 
 An integration to parse SVG files and render them with [Vello](https://vello.dev).
 
-## Examples
+> [!CAUTION]
+> Although we are not there yet, the goal of this crate is to provide decent coverage of the (large) SVG spec, up to what vello can support, for use in interactive graphics. If you are looking for a correct SVG renderer, see [resvg](https://github.com/RazrFalcon/resvg). See [vello](https://github.com/linebender/vello) for more information about limitations.
 
-See [vello](https://github.com/linebender/vello) for more information about limitations.
+## Examples
 
 ### Native
 
