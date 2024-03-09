@@ -43,7 +43,7 @@ fn splash_screen(scene: &mut Scene, params: &mut SceneParams) {
         "  Q, E: rotate",
     ];
     // Tweak to make it fit with tiger
-    let a = Affine::scale(1.) * Affine::translate((-90.0, -50.0));
+    let a = Affine::scale(0.11) * Affine::translate((-90.0, -50.0));
     for (i, s) in strings.iter().enumerate() {
         let text_size = if i == 0 { 60.0 } else { 40.0 };
         params.text.add(
