@@ -31,8 +31,6 @@ jobs:
 
       - name: Build | WASM
         run: cargo build -p with_winit --bin with_winit_bin --release --target wasm32-unknown-unknown
-        env:
-          RUSTFLAGS: '--cfg=web_sys_unstable_apis'
 
       - name: Package | WASM
         run: |
