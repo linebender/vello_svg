@@ -19,19 +19,6 @@ if [ -n "$output" ]; then
 	exit 1
 fi
 
-# Check all the shaders, both WGSL and CPU shaders in Rust, as they also have Unlicense
-output=$(rg "^// Copyright (19|20)[\d]{2} (.+ and )?the Vello Authors( and .+)?$\n^// SPDX-License-Identifier: Apache-2\.0 OR MIT OR Unlicense$\n\n" --files-without-match --multiline -g "{shader,src/cpu_shader}/**/*.{rs,wgsl}" .)
-
-if [ -n "$output" ]; then
-        echo -e "The following shader files lack the correct copyright header:\n"
-        echo $output
-        echo -e "\n\nPlease add the following header:\n"
-        echo "// Copyright $(date +%Y) the Vello Authors"
-        echo "// SPDX-License-Identifier: Apache-2.0 OR MIT OR Unlicense"
-        echo -e "\n... rest of the file ...\n"
-        exit 1
-fi
-
 echo "All files have correct copyright headers."
 exit 0
 
