@@ -62,10 +62,7 @@ fn splash_with_tiger() -> impl FnMut(&mut Scene, &mut SceneParams) {
         env!("CARGO_MANIFEST_DIR"),
         "/../assets/Ghostscript_Tiger.svg"
     ));
-    let mut tiger = crate::svg::svg_function_of(
-        "Ghostscript Tiger".to_string(),
-        move || contents,
-    );
+    let mut tiger = crate::svg::svg_function_of("Ghostscript Tiger".to_string(), move || contents);
     move |scene, params| {
         tiger(scene, params);
         splash_screen(scene, params);

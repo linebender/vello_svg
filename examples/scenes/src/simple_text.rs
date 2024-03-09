@@ -13,8 +13,7 @@ use vello::{
 // This is very much a hack to get things working.
 // On Windows, can set this to "c:\\Windows\\Fonts\\seguiemj.ttf" to get color
 // emoji
-const ROBOTO_FONT: &[u8] =
-    include_bytes!("../../assets/roboto/Roboto-Regular.ttf");
+const ROBOTO_FONT: &[u8] = include_bytes!("../../assets/roboto/Roboto-Regular.ttf");
 pub struct RobotoText {
     font: Font,
 }
@@ -95,8 +94,7 @@ impl RobotoText {
                         return None;
                     }
                     let gid = charmap.map(ch).unwrap_or_default();
-                    let advance =
-                        glyph_metrics.advance_width(gid).unwrap_or_default();
+                    let advance = glyph_metrics.advance_width(gid).unwrap_or_default();
                     let x = pen_x;
                     pen_x += advance;
                     Some(Glyph {

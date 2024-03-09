@@ -68,10 +68,7 @@ pub fn render_tree(scene: &mut Scene, svg: &usvg::Tree) {
 /// This will draw a red box over unsupported element types.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
-pub fn render_tree_with<
-    F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>,
-    E,
->(
+pub fn render_tree_with<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     scene: &mut Scene,
     svg: &usvg::Tree,
     ts: &usvg::Transform,
@@ -102,10 +99,8 @@ fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
             view_box.rect.bottom().into(),
         ),
     );
-    let (view_box_transform, clip) = geom::view_box_to_transform_with_clip(
-        view_box,
-        svg.size().to_int_size(),
-    );
+    let (view_box_transform, clip) =
+        geom::view_box_to_transform_with_clip(view_box, svg.size().to_int_size());
     if let Some(clip) = clip {
         scene.push_layer(
             BlendMode {
@@ -149,9 +144,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
             usvg::Node::Group(g) => {
                 let mut pushed_clip = false;
                 if let Some(clip_path) = g.clip_path() {
-                    if let Some(usvg::Node::Path(clip_path)) =
-                        clip_path.root().children().first()
-                    {
+                    if let Some(usvg::Node::Path(clip_path)) = clip_path.root().children().first() {
                         // support clip-path with a single path
                         let local_path = to_bez_path(clip_path);
                         scene.push_layer(
@@ -167,12 +160,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                     }
                 }
 
-                render_group(
-                    scene,
-                    g,
-                    &ts.pre_concat(g.transform()),
-                    error_handler,
-                )?;
+                render_group(scene, g, &ts.pre_concat(g.transform()), error_handler)?;
 
                 if pushed_clip {
                     scene.pop_layer();
@@ -210,37 +198,21 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                         if let Some((brush, brush_transform)) =
                             paint_to_brush(stroke.paint(), stroke.opacity())
                         {
-                            let mut conv_stroke =
-                                Stroke::new(stroke.width().get() as f64)
-                                    .with_caps(match stroke.linecap() {
-                                        usvg::LineCap::Butt => {
-                                            vello::kurbo::Cap::Butt
-                                        }
-                                        usvg::LineCap::Round => {
-                                            vello::kurbo::Cap::Round
-                                        }
-                                        usvg::LineCap::Square => {
-                                            vello::kurbo::Cap::Square
-                                        }
-                                    })
-                                    .with_join(match stroke.linejoin() {
-                                        usvg::LineJoin::Miter
-                                        | usvg::LineJoin::MiterClip => {
-                                            vello::kurbo::Join::Miter
-                                        }
-                                        usvg::LineJoin::Round => {
-                                            vello::kurbo::Join::Round
-                                        }
-                                        usvg::LineJoin::Bevel => {
-                                            vello::kurbo::Join::Bevel
-                                        }
-                                    })
-                                    .with_miter_limit(
-                                        stroke.miterlimit().get() as f64,
-                                    );
-                            if let Some(dash_array) =
-                                stroke.dasharray().as_ref()
-                            {
+                            let mut conv_stroke = Stroke::new(stroke.width().get() as f64)
+                                .with_caps(match stroke.linecap() {
+                                    usvg::LineCap::Butt => vello::kurbo::Cap::Butt,
+                                    usvg::LineCap::Round => vello::kurbo::Cap::Round,
+                                    usvg::LineCap::Square => vello::kurbo::Cap::Square,
+                                })
+                                .with_join(match stroke.linejoin() {
+                                    usvg::LineJoin::Miter | usvg::LineJoin::MiterClip => {
+                                        vello::kurbo::Join::Miter
+                                    }
+                                    usvg::LineJoin::Round => vello::kurbo::Join::Round,
+                                    usvg::LineJoin::Bevel => vello::kurbo::Join::Bevel,
+                                })
+                                .with_miter_limit(stroke.miterlimit().get() as f64);
+                            if let Some(dash_array) = stroke.dasharray().as_ref() {
                                 conv_stroke = conv_stroke.with_dashes(
                                     stroke.dashoffset() as f64,
                                     dash_array.iter().map(|x| *x as f64),
@@ -278,9 +250,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                     usvg::ImageKind::JPEG(_)
                     | usvg::ImageKind::PNG(_)
                     | usvg::ImageKind::GIF(_) => {
-                        let Ok(decoded_image) =
-                            decode_raw_raster_image(img.kind())
-                        else {
+                        let Ok(decoded_image) = decode_raw_raster_image(img.kind()) else {
                             error_handler(scene, node)?;
                             continue;
                         };
@@ -306,8 +276,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                         );
                         let view_box_transform =
                             usvg::Transform::from_row(sx, 0.0, 0.0, sy, tx, ty);
-                        let (width, height) =
-                            (decoded_image.width(), decoded_image.height());
+                        let (width, height) = (decoded_image.width(), decoded_image.height());
                         scene.push_layer(
                             BlendMode {
                                 mix: vello::peniko::Mix::Clip,
@@ -323,10 +292,8 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                             ),
                         );
 
-                        let image_ts =
-                            to_affine(&ts.pre_concat(view_box_transform));
-                        let image_data: Arc<Vec<u8>> =
-                            decoded_image.into_vec().into();
+                        let image_ts = to_affine(&ts.pre_concat(view_box_transform));
+                        let image_data: Arc<Vec<u8>> = decoded_image.into_vec().into();
                         scene.draw_image(
                             &Image::new(
                                 Blob::new(image_data),
@@ -340,13 +307,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
                         scene.pop_layer();
                     }
                     usvg::ImageKind::SVG(svg) => {
-                        render_tree_impl(
-                            scene,
-                            svg,
-                            &img.view_box(),
-                            ts,
-                            error_handler,
-                        )?;
+                        render_tree_impl(scene, svg, &img.view_box(), ts, error_handler)?;
                     }
                 }
             }
@@ -359,9 +320,7 @@ fn render_group<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     Ok(())
 }
 
-fn decode_raw_raster_image(
-    img: &usvg::ImageKind,
-) -> Result<image::RgbaImage, image::ImageError> {
+fn decode_raw_raster_image(img: &usvg::ImageKind) -> Result<image::RgbaImage, image::ImageError> {
     let res = match img {
         usvg::ImageKind::JPEG(data) => {
             image::load_from_memory_with_format(data, image::ImageFormat::Jpeg)
@@ -442,10 +401,7 @@ fn to_bez_path(path: &usvg::Path) -> BezPath {
 
 /// Error handler function for [`render_tree_with`] which draws a transparent red box
 /// instead of unsupported SVG features
-pub fn default_error_handler(
-    scene: &mut Scene,
-    node: &usvg::Node,
-) -> Result<(), Infallible> {
+pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) -> Result<(), Infallible> {
     let bb = node.bounding_box();
     let rect = Rect {
         x0: bb.left() as f64,
@@ -464,10 +420,7 @@ pub fn default_error_handler(
     Ok(())
 }
 
-fn paint_to_brush(
-    paint: &usvg::Paint,
-    opacity: usvg::Opacity,
-) -> Option<(Brush, Affine)> {
+fn paint_to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, Affine)> {
     match paint {
         usvg::Paint::Color(color) => Some((
             Brush::Solid(Color::rgba8(
@@ -504,8 +457,8 @@ fn paint_to_brush(
             ]
             .map(f64::from);
             let transform = Affine::new(arr);
-            let gradient = vello::peniko::Gradient::new_linear(start, end)
-                .with_stops(stops.as_slice());
+            let gradient =
+                vello::peniko::Gradient::new_linear(start, end).with_stops(stops.as_slice());
             Some((Brush::Gradient(gradient), transform))
         }
         usvg::Paint::RadialGradient(gr) => {

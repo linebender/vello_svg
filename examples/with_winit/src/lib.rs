@@ -123,8 +123,7 @@ fn run(
     let mut complexity_shown = false;
     let mut vsync_on = true;
 
-    const AA_CONFIGS: [AaConfig; 3] =
-        [AaConfig::Area, AaConfig::Msaa8, AaConfig::Msaa16];
+    const AA_CONFIGS: [AaConfig; 3] = [AaConfig::Area, AaConfig::Msaa8, AaConfig::Msaa16];
     // We allow cycling through AA configs in either direction, so use a signed
     // index
     let mut aa_config_ix: i32 = 0;
@@ -568,9 +567,7 @@ fn run(
         .expect("run to completion");
 }
 
-fn create_window(
-    event_loop: &winit::event_loop::EventLoopWindowTarget<UserEvent>,
-) -> Arc<Window> {
+fn create_window(event_loop: &winit::event_loop::EventLoopWindowTarget<UserEvent>) -> Arc<Window> {
     use winit::{dpi::LogicalSize, window::WindowBuilder};
     Arc::new(
         WindowBuilder::new()
@@ -617,8 +614,7 @@ pub fn main() -> Result<()> {
     let args = Args::parse();
     let scenes = args.args.select_scene_set(Args::command)?;
     if let Some(scenes) = scenes {
-        let event_loop =
-            EventLoopBuilder::<UserEvent>::with_user_event().build()?;
+        let event_loop = EventLoopBuilder::<UserEvent>::with_user_event().build()?;
         #[allow(unused_mut)]
         let mut render_cx = RenderContext::new().unwrap();
         #[cfg(not(target_arch = "wasm32"))]
@@ -657,10 +653,8 @@ pub fn main() -> Result<()> {
                         )
                     })
                     .unwrap();
-                let size = winit::dpi::PhysicalSize::from_logical::<_, f64>(
-                    (width, height),
-                    scale_factor,
-                );
+                let size =
+                    winit::dpi::PhysicalSize::from_logical::<_, f64>((width, height), scale_factor);
                 _ = window.request_inner_size(size);
                 let surface = render_cx
                     .create_surface(
@@ -693,8 +687,7 @@ fn android_main(app: AndroidApp) {
     use winit::platform::android::EventLoopBuilderExtAndroid;
 
     android_logger::init_once(
-        android_logger::Config::default()
-            .with_max_level(log::LevelFilter::Warn),
+        android_logger::Config::default().with_max_level(log::LevelFilter::Warn),
     );
 
     let event_loop = EventLoopBuilder::with_user_event()

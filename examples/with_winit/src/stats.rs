@@ -87,11 +87,7 @@ impl Snapshot {
                 None,
                 text_size,
                 Some(&Brush::Solid(Color::WHITE)),
-                offset
-                    * Affine::translate((
-                        left_margin,
-                        (i + 1) as f64 * text_height,
-                    )),
+                offset * Affine::translate((left_margin, (i + 1) as f64 * text_height)),
                 label,
             );
         }
@@ -132,8 +128,7 @@ impl Snapshot {
             self.frame_time_max_ms
         };
         for (i, sample) in samples.enumerate() {
-            let t = offset
-                * Affine::translate((i as f64 * bar_extent, graph_max_height));
+            let t = offset * Affine::translate((i as f64 * bar_extent, graph_max_height));
             // The height of each sample is based on its ratio to the maximum
             // observed frame time.
             let sample_ms = ((*sample as f64) * 0.001).min(display_max);
@@ -180,11 +175,7 @@ impl Snapshot {
             );
             scene.stroke(
                 &Stroke::new(graph_max_height * 0.01),
-                offset
-                    * Affine::translate((
-                        left_margin_padding,
-                        (1. - y) * graph_max_height,
-                    )),
+                offset * Affine::translate((left_margin_padding, (1. - y) * graph_max_height)),
                 Color::WHITE,
                 None,
                 &marker,
@@ -329,11 +320,7 @@ pub fn draw_gpu_profiling(
                 None,
                 text_size,
                 Some(&Brush::Solid(Color::WHITE)),
-                offset
-                    * Affine::translate((
-                        left_margin,
-                        (i + 1) as f64 * text_height,
-                    )),
+                offset * Affine::translate((left_margin, (i + 1) as f64 * text_height)),
                 label,
             );
         }
@@ -345,11 +332,7 @@ pub fn draw_gpu_profiling(
                 None,
                 text_size,
                 Some(&Brush::Solid(Color::WHITE)),
-                offset
-                    * Affine::translate((
-                        left_margin,
-                        (i + 1) as f64 * text_height,
-                    )),
+                offset * Affine::translate((left_margin, (i + 1) as f64 * text_height)),
                 label,
             );
         }
@@ -369,12 +352,10 @@ pub fn draw_gpu_profiling(
     let depth_size = depth_width * 0.8;
     traverse_profiling(profiles, &mut |profile, stage| {
         if let TraversalStage::Enter = stage {
-            let start_normalised = ((profile.time.start - min) / total_time)
-                * timeline_range_y
-                + timeline_start_y;
-            let end_normalised = ((profile.time.end - min) / total_time)
-                * timeline_range_y
-                + timeline_start_y;
+            let start_normalised =
+                ((profile.time.start - min) / total_time) * timeline_range_y + timeline_start_y;
+            let end_normalised =
+                ((profile.time.end - min) / total_time) * timeline_range_y + timeline_start_y;
 
             let color = COLORS[cur_index % COLORS.len()];
             let x = width * 0.01 + (depth as f64 * depth_width);
@@ -400,10 +381,7 @@ pub fn draw_gpu_profiling(
                 // Ensure that we don't overlap the previous item
                 .max(cur_text_y)
                 // Ensure that all remaining items can fit
-                .min(
-                    timeline_range_end
-                        - (count - cur_index) as f64 * text_height,
-                );
+                .min(timeline_range_end - (count - cur_index) as f64 * text_height);
             let (text_height, text_color) = if slow {
                 (text_height, Color::WHITE)
             } else {
@@ -445,10 +423,7 @@ pub fn draw_gpu_profiling(
                     &Brush::Solid(color),
                     None,
                     &Line::new(
-                        (
-                            x + depth_size,
-                            (end_normalised + start_normalised) / 2.,
-                        ),
+                        (x + depth_size, (end_normalised + start_normalised) / 2.),
                         (width * 0.31, cur_text_y - text_size as f64 * 0.35),
                     ),
                 );

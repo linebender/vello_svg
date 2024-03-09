@@ -65,10 +65,8 @@ impl Download {
                         println!(
                             "{} ({}) under license {} from {}",
                             download.name,
-                            byte_unit::Byte::from_bytes(
-                                builtin.expected_size.into()
-                            )
-                            .get_appropriate_unit(false),
+                            byte_unit::Byte::from_bytes(builtin.expected_size.into())
+                                .get_appropriate_unit(false),
                             builtin.license,
                             builtin.info
                         );
@@ -77,8 +75,7 @@ impl Download {
                     // For rustfmt, split prompt into its own line
                     const PROMPT: &str =
                 "Would you like to download a set of default svg files, as explained above?";
-                    accepted =
-                        Confirm::new(PROMPT).with_default(false).prompt()?;
+                    accepted = Confirm::new(PROMPT).with_default(false).prompt()?;
                 } else {
                     println!("Nothing to download! All default downloads already created");
                 }
@@ -111,8 +108,7 @@ impl Download {
                         if failed_count > 0 {
                             println!("{} downloads failed", failed_count);
                         }
-                        let remaining = to_download.len()
-                            - (completed_count + failed_count);
+                        let remaining = to_download.len() - (completed_count + failed_count);
                         if remaining > 0 {
                             println!("{} downloads skipped", remaining);
                         }
@@ -177,9 +173,7 @@ impl SVGDownload {
         if limit_exact {
             let head_response = ureq::head(&self.url).call()?;
             let content_length = head_response.header("content-length");
-            if let Some(Ok(content_length)) =
-                content_length.map(|it| it.parse::<u64>())
-            {
+            if let Some(Ok(content_length)) = content_length.map(|it| it.parse::<u64>()) {
                 if content_length != size_limit {
                     bail!(
                         "Size is not as expected for download. Expected {}, server reported {}",
@@ -205,8 +199,7 @@ impl SVGDownload {
             bail!("Size limit exceeded");
         }
         if limit_exact {
-            let bytes_downloaded =
-                file.stream_position().context("Checking file limit")?;
+            let bytes_downloaded = file.stream_position().context("Checking file limit")?;
             if bytes_downloaded != size_limit {
                 bail!(
                     "Builtin downloaded file was not as expected. Expected {size_limit}, received {bytes_downloaded}.",

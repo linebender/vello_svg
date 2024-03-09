@@ -6,17 +6,13 @@ use std::{path::Path, time::Duration};
 use anyhow::Result;
 use notify_debouncer_mini::{new_debouncer, notify::*, DebounceEventResult};
 
-pub(crate) fn hot_reload(
-    mut f: impl FnMut() -> Option<()> + Send + 'static,
-) -> Result<impl Sized> {
+pub(crate) fn hot_reload(mut f: impl FnMut() -> Option<()> + Send + 'static) -> Result<impl Sized> {
     let mut debouncer = new_debouncer(
         Duration::from_millis(500),
         None,
         move |res: DebounceEventResult| match res {
             Ok(_) => f().unwrap(),
-            Err(errors) => {
-                errors.iter().for_each(|e| println!("Error {:?}", e))
-            }
+            Err(errors) => errors.iter().for_each(|e| println!("Error {:?}", e)),
         },
     )?;
 

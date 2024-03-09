@@ -161,18 +161,14 @@ impl TouchState {
             let zoom_delta2 = if self.active_touches.len() > 1 {
                 match state.pinch_type {
                     PinchType::Horizontal => Vec2::new(
-                        state.current.avg_abs_distance2.x
-                            / state_previous.avg_abs_distance2.x,
+                        state.current.avg_abs_distance2.x / state_previous.avg_abs_distance2.x,
                         1.0,
                     ),
                     PinchType::Vertical => Vec2::new(
                         1.0,
-                        state.current.avg_abs_distance2.y
-                            / state_previous.avg_abs_distance2.y,
+                        state.current.avg_abs_distance2.y / state_previous.avg_abs_distance2.y,
                     ),
-                    PinchType::Proportional => {
-                        Vec2::new(zoom_delta, zoom_delta)
-                    }
+                    PinchType::Proportional => Vec2::new(zoom_delta, zoom_delta),
                 }
             } else {
                 Vec2::new(1.0, 1.0)
@@ -183,10 +179,8 @@ impl TouchState {
                 zoom_delta,
                 zoom_delta_2d: zoom_delta2,
                 zoom_centre: state.current.avg_pos,
-                rotation_delta: (state.current.heading
-                    - state_previous.heading),
-                translation_delta: state.current.avg_pos
-                    - state_previous.avg_pos,
+                rotation_delta: (state.current.heading - state_previous.heading),
+                translation_delta: state.current.avg_pos - state_previous.avg_pos,
             }
         })
     }

@@ -17,9 +17,7 @@ pub fn scene_from_files(files: &[PathBuf]) -> Result<SceneSet> {
     scene_from_files_inner(files, || ())
 }
 
-pub fn default_scene(
-    command: impl FnOnce() -> clap::Command,
-) -> Result<SceneSet> {
+pub fn default_scene(command: impl FnOnce() -> clap::Command) -> Result<SceneSet> {
     let assets_dir = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../assets/")
         .canonicalize()?;
@@ -54,9 +52,7 @@ fn scene_from_files_inner(
             let start_index = scenes.len();
             for file in read_dir(path)? {
                 let entry = file?;
-                if let Some(extension) =
-                    Path::new(&entry.file_name()).extension()
-                {
+                if let Some(extension) = Path::new(&entry.file_name()).extension() {
                     if extension == "svg" {
                         count += 1;
                         scenes.push(example_scene_of(entry.path()));
@@ -64,8 +60,7 @@ fn scene_from_files_inner(
                 }
             }
             // Ensure a consistent order within directories
-            scenes[start_index..]
-                .sort_by_key(|scene| scene.config.name.to_lowercase());
+            scenes[start_index..].sort_by_key(|scene| scene.config.name.to_lowercase());
             if count == 0 {
                 empty_dir();
             }
@@ -83,9 +78,8 @@ fn example_scene_of(file: PathBuf) -> ExampleScene {
         .unwrap_or_else(|| "unknown".to_string());
     ExampleScene {
         function: Box::new(svg_function_of(name.clone(), move || {
-            std::fs::read_to_string(&file).unwrap_or_else(|e| {
-                panic!("failed to read svg file {file:?}: {e}")
-            })
+            std::fs::read_to_string(&file)
+                .unwrap_or_else(|e| panic!("failed to read svg file {file:?}: {e}"))
         })),
         config: crate::SceneConfig {
             animated: false,
@@ -101,17 +95,13 @@ pub fn svg_function_of<R: AsRef<str>>(
     fn render_svg_contents(name: &str, contents: &str) -> (Scene, Vec2) {
         let start = Instant::now();
         let fontdb = usvg::fontdb::Database::new();
-        let svg =
-            usvg::Tree::from_str(contents, &usvg::Options::default(), &fontdb)
-                .unwrap_or_else(|e| {
-                    panic!("failed to parse svg file {name}: {e}")
-                });
+        let svg = usvg::Tree::from_str(contents, &usvg::Options::default(), &fontdb)
+            .unwrap_or_else(|e| panic!("failed to parse svg file {name}: {e}"));
         eprintln!("Parsed svg {name} in {:?}", start.elapsed());
         let start = Instant::now();
         let mut new_scene = Scene::new();
         vello_svg::render_tree(&mut new_scene, &svg);
-        let resolution =
-            Vec2::new(svg.size().width() as f64, svg.size().height() as f64);
+        let resolution = Vec2::new(svg.size().width() as f64, svg.size().height() as f64);
         eprintln!("Encoded svg {name} in {:?}", start.elapsed());
         (new_scene, resolution)
     }
@@ -132,15 +122,11 @@ pub fn svg_function_of<R: AsRef<str>>(
         if cfg!(target_arch = "wasm32") || !params.interactive {
             let contents = contents.take().unwrap();
             let contents = contents();
-            let (scene_frag, resolution) =
-                render_svg_contents(&name, contents.as_ref());
+            let (scene_frag, resolution) = render_svg_contents(&name, contents.as_ref());
             scene.append(&scene_frag, None);
             params.resolution = Some(resolution);
             cached_scene = Some((scene_frag, resolution));
-            #[cfg_attr(
-                target_arch = "wasm32",
-                allow(clippy::needless_return)
-            )]
+            #[cfg_attr(target_arch = "wasm32", allow(clippy::needless_return))]
             return;
         }
         #[cfg(not(target_arch = "wasm32"))]
