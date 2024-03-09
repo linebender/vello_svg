@@ -17,7 +17,7 @@ description = "An SVG integration for vello."
 categories = ["rendering", "graphics"]
 keywords = ["2d", "vector-graphics", "vello", "svg"]
 version.workspace = true
-license.workspace = true
+license = "(Apache-2.0 OR MIT) AND MPL-2.0"
 edition.workspace = true
 repository.workspace = true
 
