@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use scenes::RobotoText;
-use std::{collections::VecDeque, time::Duration};
-use vello::{
-    kurbo::{Affine, Line, PathEl, Rect, Stroke},
-    peniko::{Brush, Color, Fill},
-    AaConfig, BumpAllocators, Scene,
-};
+use std::collections::VecDeque;
+use std::time::Duration;
+use vello::kurbo::{Affine, Line, PathEl, Rect, Stroke};
+use vello::peniko::{Brush, Color, Fill};
+use vello::{AaConfig, BumpAllocators, Scene};
 use wgpu_profiler::GpuTimerQueryResult;
 
 const SLIDING_WINDOW_SIZE: usize = 100;

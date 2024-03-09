@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::{ExampleScene, SceneConfig, SceneParams, SceneSet};
-use vello::{kurbo::Affine, *};
+use vello::kurbo::Affine;
+use vello::*;
 
 macro_rules! scene {
     ($name: ident) => {
