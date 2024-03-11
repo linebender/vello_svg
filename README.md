@@ -1,6 +1,6 @@
 <div align="center">
 
-# vello_svg
+# Vello SVG
 
 **An integration to parse and render SVG with [Vello](https://vello.dev).**
 
