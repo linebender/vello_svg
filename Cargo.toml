@@ -1,0 +1,37 @@
+[workspace]
+resolver = "2"
+members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/linebender/vello_svg"
+
+[workspace.dependencies]
+# Update the README badges to match wgpu and vello version!
+vello = "0.1"
+
+[package]
+name = "vello_svg"
+description = "An SVG integration for vello."
+categories = ["rendering", "graphics"]
+keywords = ["2d", "vector-graphics", "vello", "svg"]
+version.workspace = true
+license = "(Apache-2.0 OR MIT) AND MPL-2.0"
+edition.workspace = true
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+vello = { workspace = true }
+usvg = "0.40"
+image = { version = "0.24", default-features = false, features = [
+  "png",
+  "jpeg",
+  "gif",
+] }
+
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = "0.3"
