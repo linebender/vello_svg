@@ -1,14 +1,14 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Append a [`usvg::Tree`] to a Vello [`Scene`]
+//! Render a [`usvg::Tree`] to a Vello [`Scene`](crate::vello::Scene)
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //! This is because this integration was developed for examples, which only need to support enough SVG
 //! to demonstrate Vello.
 //!
 //! However, this is also intended to be the preferred integration between Vello and [usvg], so [consider
-//! contributing](https://github.com/linebender/vello) if you need a feature which is missing.
+//! contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
 //!
 //! [`render_tree_with`] is the primary entry point function, which supports choosing the behaviour
 //! when [unsupported features](crate#unsupported-features) are detected. In a future release where there are
