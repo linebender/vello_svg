@@ -1,7 +1,7 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Render a [`usvg::Tree`] to a Vello [`Scene`](https://docs.rs/vello/*/vello/struct.Scene.html)
+//! Render a [`usvg::Tree`] to a Vello [`Scene`](crate::vello::Scene)
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //! This is because this integration was developed for examples, which only need to support enough SVG
