@@ -31,7 +31,3 @@ image = { version = "0.25.0", default-features = false, features = [
   "jpeg",
   "gif",
 ] }
-
-
-[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.42"
