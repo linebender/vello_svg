@@ -40,9 +40,6 @@ use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
 use vello::peniko::{BlendMode, Blob, Brush, Color, Fill, Image};
 use vello::Scene;
 
-/// Re-export vello.
-pub use vello;
-
 /// Re-export usvg.
 pub use usvg;
 
