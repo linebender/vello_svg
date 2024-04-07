@@ -13,7 +13,7 @@ fn main() {
         .unwrap();
     let tiger_path = assets_dir.join("Ghostscript_Tiger.svg");
     let tiger_source =
-        std::fs::read_to_string(&tiger_path).expect("Couldn't read svg file {tiger_path:?}");
+        std::fs::read_to_string(tiger_path).expect("Couldn't read svg file {tiger_path:?}");
 
     // Parsing the source into an usvg tree
     let fontdb = vello_svg::usvg::fontdb::Database::new();
