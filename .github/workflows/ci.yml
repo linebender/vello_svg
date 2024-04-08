@@ -5,6 +5,7 @@ env:
   # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
   RUST_STABLE_VER: "1.76" # In quotes because otherwise (e.g.) 1.70 would be interpreted as 1.7
 
+
 # Rationale
 #
 # We don't run clippy with --all-targets because then even --lib and --bins are compiled with
@@ -50,13 +51,13 @@ jobs:
         os: [windows-latest, macos-14, ubuntu-latest]
         include:
           - os: ubuntu-latest
-            gpu: "yes"
+            gpu: 'yes'
           - os: macos-14
-            gpu: "yes"
+            gpu: 'yes'
           - os: windows-latest
             # TODO: The windows runners theoretically have CPU fallback for GPUs, but
             # this failed in initial testing
-            gpu: "no"
+            gpu: 'no'
     name: cargo clippy + test
     steps:
       - uses: actions/checkout@v4
@@ -146,10 +147,10 @@ jobs:
         run: cargo install cargo-apk
 
       - name: cargo apk check (android)
-        run: cargo apk check -p tiger
+        run: cargo apk check -p with_winit --lib
         env:
           # This is a bit of a hack, but cargo apk doesn't seem to allow customising this
-          RUSTFLAGS: "-D warnings"
+          RUSTFLAGS: '-D warnings'
 
   docs:
     name: cargo doc
