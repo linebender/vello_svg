@@ -146,7 +146,7 @@ jobs:
         run: cargo install cargo-apk
 
       - name: cargo apk check (android)
-        run: cargo apk check -p tiger --lib
+        run: cargo apk check -p tiger
         env:
           # This is a bit of a hack, but cargo apk doesn't seem to allow customising this
           RUSTFLAGS: "-D warnings"
