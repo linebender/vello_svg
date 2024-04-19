@@ -1,3 +1,6 @@
+// Copyright 2023 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 use std::convert::Infallible;
 use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
 use vello::peniko::{Blob, Brush, Color, Fill, Image};
