@@ -12,7 +12,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ### changed
 
-- Updated usvg to 0.41
+- Updated `usvg` to 0.41
 
 ### fixed
 
