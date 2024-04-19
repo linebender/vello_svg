@@ -10,6 +10,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
+### changed
+
+- Updated usvg to 0.41
+
+### fixed
+
+- The image viewBox is now properly translated
+
 ## 0.1 (2024-03-11)
 
 - Initial release

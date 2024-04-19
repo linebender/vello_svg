@@ -56,7 +56,7 @@ pub fn render_tree(scene: &mut Scene, svg: &usvg::Tree) {
     render_tree_with::<_, Infallible>(
         scene,
         svg,
-        &usvg::Transform::identity(),
+        &svg.view_box().to_transform(svg.size()),
         &mut default_error_handler,
     )
     .unwrap_or_else(|e| match e {});
@@ -74,7 +74,13 @@ pub fn render_tree_with<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     ts: &usvg::Transform,
     error_handler: &mut F,
 ) -> Result<(), E> {
-    render_tree_impl(scene, svg, &svg.view_box(), ts, error_handler)
+    render_tree_impl(
+        scene,
+        svg,
+        &svg.view_box(),
+        &ts.pre_concat(svg.view_box().to_transform(svg.size())),
+        error_handler,
+    )
 }
 
 fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
@@ -101,6 +107,7 @@ fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     );
     let (view_box_transform, clip) =
         geom::view_box_to_transform_with_clip(view_box, svg.size().to_int_size());
+    let view_box_transform = view_box_transform.pre_concat(svg.view_box().to_transform(svg.size()));
     if let Some(clip) = clip {
         scene.push_layer(
             BlendMode {
