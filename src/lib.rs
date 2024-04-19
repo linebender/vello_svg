@@ -74,13 +74,7 @@ pub fn render_tree_with<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     ts: &usvg::Transform,
     error_handler: &mut F,
 ) -> Result<(), E> {
-    render_tree_impl(
-        scene,
-        svg,
-        &svg.view_box(),
-        &ts.pre_concat(svg.view_box().to_transform(svg.size())),
-        error_handler,
-    )
+    render_tree_impl(scene, svg, &svg.view_box(), ts, error_handler)
 }
 
 fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
@@ -90,6 +84,7 @@ fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     ts: &usvg::Transform,
     error_handler: &mut F,
 ) -> Result<(), E> {
+    let ts = &ts.pre_concat(view_box.to_transform(svg.size()));
     let transform = to_affine(ts);
     scene.push_layer(
         BlendMode {
