@@ -102,7 +102,7 @@ fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     );
     let (view_box_transform, clip) =
         geom::view_box_to_transform_with_clip(view_box, svg.size().to_int_size());
-    let view_box_transform = view_box_transform.pre_concat(svg.view_box().to_transform(svg.size()));
+    let view_box_transform = view_box_transform.pre_concat(view_box.to_transform(svg.size()));
     if let Some(clip) = clip {
         scene.push_layer(
             BlendMode {
