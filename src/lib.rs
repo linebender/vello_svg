@@ -56,7 +56,7 @@ pub fn render_tree(scene: &mut Scene, svg: &usvg::Tree) {
     render_tree_with::<_, Infallible>(
         scene,
         svg,
-        &svg.view_box().to_transform(svg.size()),
+        &usvg::Transform::identity(),
         &mut default_error_handler,
     )
     .unwrap_or_else(|e| match e {});
