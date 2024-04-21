@@ -6,7 +6,7 @@
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
-[![(MIT/Apache 2.0)+MPL 2.0](https://img.shields.io/badge/license-(MIT%2FApache)+MPL2-blue.svg)](#license)
+[![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](#license)
 [![vello version](https://img.shields.io/badge/vello-v0.1.0-purple.svg)](https://crates.io/crates/vello)
 
 [![Crates.io](https://img.shields.io/crates/v/vello_svg.svg)](https://crates.io/crates/vello_svg)
@@ -67,10 +67,7 @@ Licensed under either of
 - MIT license
    ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
-at your option, in addition to
-
-- Mozilla Public License 2.0
-   ([LICENSE-MPL](LICENSE-MPL) or <https://www.mozilla.org/en-US/MPL/2.0/>).
+at your option
 
 The files in subdirectories of the [`examples/assets`](/examples/assets) directory are licensed solely under
 their respective licenses, available in the `LICENSE` file in their directories.
