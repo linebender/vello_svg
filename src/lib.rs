@@ -1,7 +1,7 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Render a [`usvg::Tree`] to a Vello [`Scene`](crate::vello::Scene)
+//! Render a [`usvg::Tree`] to a Vello [`Scene`].
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //! This is because this integration was developed for examples, which only need to support enough SVG
@@ -32,7 +32,7 @@
 //! - path shape-rendering
 //! - patterns
 
-mod util;
+pub mod util;
 
 use std::convert::Infallible;
 use vello::peniko::{BlendMode, Fill};
@@ -57,7 +57,7 @@ pub fn render_tree(scene: &mut Scene, svg: &usvg::Tree) {
 
 /// Append a [`usvg::Tree`] into a Vello [`Scene`].
 ///
-/// Calls [`render_tree_with`] with [`default_error_handler`].
+/// Calls [`render_tree_with`] with [`util::default_error_handler`].
 /// This will draw a red box over unsupported element types.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
@@ -75,7 +75,7 @@ pub fn render_tree_with<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     )
 }
 
-// A helper function to render a tree with a given transform.
+/// A helper function to render a tree with a given transform.
 fn render_tree_impl<F: FnMut(&mut Scene, &usvg::Node) -> Result<(), E>, E>(
     scene: &mut Scene,
     tree: &usvg::Tree,
