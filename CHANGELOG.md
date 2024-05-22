@@ -11,6 +11,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 ## Unreleased
 
 - Disable `vello`'s default `wgpu` feature, and provide a `wgpu` passthrough feature to turn it back on. [#10](https://github.com/linebender/vello_svg/pull/10)
+- Make `util` module public and some minor doc fixes. [#12](https://github.com/linebender/vello_svg/pull/12)
 
 ### Changed
 
