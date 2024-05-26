@@ -10,7 +10,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
-## 0.1.1
+## 0.2.0
 
 ### Added
 
@@ -25,6 +25,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 - The image viewBox is now properly translated
 - `vello_svg::render_tree_with` no longer takes a transform parameter. This is to make it consistent with the documentation and `vello_svg::render_tree`.
+
+## 0.1.1 (Yanked)
 
 ### Removed
 
