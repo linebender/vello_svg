@@ -38,9 +38,6 @@ use std::convert::Infallible;
 use vello::peniko::{BlendMode, Fill};
 use vello::Scene;
 
-/// Re-export vello.
-pub use vello;
-
 /// Re-export usvg.
 pub use usvg;
 
