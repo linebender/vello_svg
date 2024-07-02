@@ -93,16 +93,14 @@ pub fn svg_function_of<R: AsRef<str>>(
 ) -> impl FnMut(&mut Scene, &mut SceneParams) {
     fn render_svg_contents(name: &str, contents: &str) -> (Scene, Vec2) {
         let start = Instant::now();
-        let fontdb = usvg::fontdb::Database::new();
-        let svg = usvg::Tree::from_str(contents, &usvg::Options::default(), &fontdb)
+        let svg = usvg::Tree::from_str(contents, &usvg::Options::default())
             .unwrap_or_else(|e| panic!("failed to parse svg file {name}: {e}"));
         eprintln!("Parsed svg {name} in {:?}", start.elapsed());
         let start = Instant::now();
-        let mut new_scene = Scene::new();
-        vello_svg::render_tree(&mut new_scene, &svg);
+        let scene = vello_svg::render_tree(&svg);
         let resolution = Vec2::new(svg.size().width() as f64, svg.size().height() as f64);
         eprintln!("Encoded svg {name} in {:?}", start.elapsed());
-        (new_scene, resolution)
+        (scene, resolution)
     }
     let mut cached_scene = None;
     #[cfg(not(target_arch = "wasm32"))]
