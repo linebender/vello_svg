@@ -8,7 +8,7 @@
 //! This is also intended to be the preferred integration between Vello and [usvg], so [consider
 //! contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
 //!
-//! This crate also re-exports [`usvg`] and [`vello`], to make handling dependency versions easier.
+//! This crate also re-exports [`usvg`] and [`vello`], so you can easily use the specific versions that are compatible with Vello SVG.
 //!
 //! # Unsupported features
 //!
