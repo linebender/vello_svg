@@ -10,6 +10,27 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
+## 0.3.0
+
+### Added
+
+- Added `vello_svg::Error`, which is returned by new functions that read text into a `usvg::Tree`.
+- Added `vello_svg::render`, which takes an svg string and renders to a new vello scene.
+- Added `vello_svg::append`, which takes an svg string and renders to a provided vello scene.
+- Added `vello_svg::append_with`, which takes an svg string and renders to a provided vello scene with and error handler.
+- Added `vello_svg::render_tree`, which takes a usvg::Tree and renders to a provided vello scene with and error handler.
+
+### Changed
+
+- Updated to vello 0.2
+- Updated to usvg 0.42
+- Renamed `render_tree` to `append_tree`
+- Renamed `render_tree_with` to `append_tree_with` and removed the `Result<(), E>` return type for the error handler.
+
+### Removed
+
+- All code and related profiling (`wgpu_profiler`) used in examples.
+
 ## 0.2.0
 
 ### Added

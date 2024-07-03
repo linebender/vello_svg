@@ -1,7 +1,6 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use std::convert::Infallible;
 use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
 use vello::peniko::{Blob, Brush, Color, Fill, Image};
 use vello::Scene;
@@ -186,7 +185,7 @@ pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, A
 
 /// Error handler function for [`super::render_tree_with`] which draws a transparent red box
 /// instead of unsupported SVG features
-pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) -> Result<(), Infallible> {
+pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) {
     let bb = node.bounding_box();
     let rect = Rect {
         x0: bb.left() as f64,
@@ -201,8 +200,6 @@ pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) -> Result<(),
         None,
         &rect,
     );
-
-    Ok(())
 }
 
 pub fn decode_raw_raster_image(
