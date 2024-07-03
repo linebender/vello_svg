@@ -3,7 +3,7 @@
 
 use thiserror::Error;
 
-/// Triggered when is an issue parsing an SVG file.
+/// Triggered when there is an issue parsing user input.
 #[derive(Error, Debug)]
 #[non_exhaustive]
 pub enum Error {
