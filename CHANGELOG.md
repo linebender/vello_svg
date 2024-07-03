@@ -28,7 +28,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ### Removed
 
-- All code and related profiling related to the `wgpu_profiler` used in examples.
+- All code and related profiling (`wgpu_profiler`) used in examples.
 
 ## 0.2.0
 
