@@ -26,6 +26,10 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 - Renamed `render_tree` to `append_tree`
 - Renamed `render_tree_with` to `append_tree_with` and removed the `Result<(), E>` return type for the error handler.
 
+### Removed
+
+- All code and related profiling related to the `wgpu_profiler` used in examples.
+
 ## 0.2.0
 
 ### Added
