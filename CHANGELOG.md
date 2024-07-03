@@ -23,6 +23,7 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 ### Changed
 
 - Updated to vello 0.2
+- Updated to usvg 0.42
 - Renamed `render_tree` to `append_tree`
 - Renamed `render_tree_with` to `append_tree_with` and removed the `Result<(), E>` return type for the error handler.
 
