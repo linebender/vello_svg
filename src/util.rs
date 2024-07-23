@@ -52,13 +52,13 @@ pub fn to_bez_path(path: &usvg::Path) -> BezPath {
                     local_path.move_to(most_recent_initial);
                 }
                 most_recent_initial = (p.x.into(), p.y.into());
-                local_path.move_to(most_recent_initial)
+                local_path.move_to(most_recent_initial);
             }
             usvg::tiny_skia_path::PathSegment::LineTo(p) => {
                 if std::mem::take(&mut just_closed) {
                     local_path.move_to(most_recent_initial);
                 }
-                local_path.line_to(Point::new(p.x as f64, p.y as f64))
+                local_path.line_to(Point::new(p.x as f64, p.y as f64));
             }
             usvg::tiny_skia_path::PathSegment::QuadTo(p1, p2) => {
                 if std::mem::take(&mut just_closed) {
@@ -67,7 +67,7 @@ pub fn to_bez_path(path: &usvg::Path) -> BezPath {
                 local_path.quad_to(
                     Point::new(p1.x as f64, p1.y as f64),
                     Point::new(p2.x as f64, p2.y as f64),
-                )
+                );
             }
             usvg::tiny_skia_path::PathSegment::CubicTo(p1, p2, p3) => {
                 if std::mem::take(&mut just_closed) {
@@ -77,11 +77,11 @@ pub fn to_bez_path(path: &usvg::Path) -> BezPath {
                     Point::new(p1.x as f64, p1.y as f64),
                     Point::new(p2.x as f64, p2.y as f64),
                     Point::new(p3.x as f64, p3.y as f64),
-                )
+                );
             }
             usvg::tiny_skia_path::PathSegment::Close => {
                 just_closed = true;
-                local_path.close_path()
+                local_path.close_path();
             }
         }
     }

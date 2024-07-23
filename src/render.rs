@@ -60,7 +60,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                                 &local_path,
                             );
                         } else {
-                            error_handler(scene, node)
+                            error_handler(scene, node);
                         }
                     }
                 };
@@ -78,7 +78,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                                 &local_path,
                             );
                         } else {
-                            error_handler(scene, node)
+                            error_handler(scene, node);
                         }
                     }
                 };
