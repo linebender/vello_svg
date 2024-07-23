@@ -95,5 +95,5 @@ pub fn append_tree_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
     svg: &usvg::Tree,
     error_handler: &mut F,
 ) {
-    render::render_group(scene, svg.root(), error_handler)
+    render::render_group(scene, svg.root(), error_handler);
 }
