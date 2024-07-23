@@ -10,7 +10,11 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## Unreleased
 
+This release has an [MSRV][] of 1.75.
+
 ## 0.3.0
+
+This release has an [MSRV][] of 1.75.
 
 ### Added
 
@@ -32,6 +36,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 - All code and related profiling (`wgpu_profiler`) used in examples.
 
 ## 0.2.0
+
+This release has an [MSRV][] of 1.75.
 
 ### Added
 
@@ -55,4 +61,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 ## 0.1 (2024-03-11)
 
+This release has an [MSRV][] of 1.75.
+
 - Initial release
+
+[MSRV]: README.md#minimum-supported-rust-version-msrv
