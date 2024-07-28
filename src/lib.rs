@@ -35,6 +35,7 @@ pub use vello;
 
 /// Re-export usvg.
 pub use usvg;
+use vello::kurbo::Affine;
 
 /// Render a [`Scene`] from an SVG string, with default error handling.
 ///
@@ -95,5 +96,5 @@ pub fn append_tree_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
     svg: &usvg::Tree,
     error_handler: &mut F,
 ) {
-    render::render_group(scene, svg.root(), error_handler);
+    render::render_group(scene, svg.root(), Affine::IDENTITY, error_handler);
 }

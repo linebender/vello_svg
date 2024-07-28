@@ -2,16 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::util;
+use vello::kurbo::Affine;
 use vello::peniko::{BlendMode, Fill};
 use vello::Scene;
 
 pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
     scene: &mut Scene,
     group: &usvg::Group,
+    transform: Affine,
     error_handler: &mut F,
 ) {
     for node in group.children() {
-        let transform = util::to_affine(&node.abs_transform());
+        let transform = transform * util::to_affine(&node.abs_transform());
         match node {
             usvg::Node::Group(g) => {
                 let mut pushed_clip = false;
@@ -32,7 +34,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                     }
                 }
 
-                render_group(scene, g, error_handler);
+                render_group(scene, g, Affine::IDENTITY, error_handler);
 
                 if pushed_clip {
                     scene.pop_layer();
@@ -110,12 +112,12 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                         scene.draw_image(&image, image_ts);
                     }
                     usvg::ImageKind::SVG(svg) => {
-                        render_group(scene, svg.root(), error_handler);
+                        render_group(scene, svg.root(), transform, error_handler);
                     }
                 }
             }
-            usvg::Node::Text(_) => {
-                error_handler(scene, node);
+            usvg::Node::Text(text) => {
+                render_group(scene, text.flattened(), transform, error_handler);
             }
         }
     }
