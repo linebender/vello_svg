@@ -12,6 +12,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 This release has an [MSRV][] of 1.75.
 
+### Added
+
+- Support for rendering basic text
+
+### Fixed
+
+- Transform of nested SVGs
+
 ## 0.3.0
 
 This release has an [MSRV][] of 1.75.
