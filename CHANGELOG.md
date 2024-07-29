@@ -14,6 +14,8 @@ This release has an [MSRV][] of 1.75.
 
 ## [0.3.1][] (2024-07-29)
 
+This release has an [MSRV][] of 1.75.
+
 ### Added
 
 - Support for rendering basic text ([#26] by [@nicoburns])
