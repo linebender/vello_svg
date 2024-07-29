@@ -20,6 +20,10 @@ This release has an [MSRV][] of 1.75.
 
 - Transform of nested SVGs ([#26] by [@nicoburns])
 
+### Changed
+
+- Updated to vello 0.2.1 ([#28] by [@waywardmonkeys])
+
 ## [0.3.0][] (2024-07-04)
 
 This release has an [MSRV][] of 1.75.
@@ -74,8 +78,10 @@ This release has an [MSRV][] of 1.75.
 - Initial release
 
 [@nicoburns]: https://github.com/nicoburns
+[@waywardmonkeys]: https://github.com/waywardmonkeys
 
 [#26]: https://github.com/linebender/vello_svg/pull/26
+[#28]: https://github.com/linebender/vello_svg/pull/28
 
 [Unreleased]: https://github.com/linebender/vello_svg/compare/v0.3.0...HEAD
 [0.3.0]: https://github.com/linebender/vello_svg/compare/v0.2.0...v0.3.0
