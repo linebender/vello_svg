@@ -8,19 +8,19 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-## Unreleased
+## [Unreleased][]
 
 This release has an [MSRV][] of 1.75.
 
 ### Added
 
-- Support for rendering basic text
+- Support for rendering basic text ([#26] by [@nicoburns])
 
 ### Fixed
 
-- Transform of nested SVGs
+- Transform of nested SVGs ([#26] by [@nicoburns])
 
-## 0.3.0
+## [0.3.0][] (2024-07-04)
 
 This release has an [MSRV][] of 1.75.
 
@@ -43,7 +43,7 @@ This release has an [MSRV][] of 1.75.
 
 - All code and related profiling (`wgpu_profiler`) used in examples.
 
-## 0.2.0
+## [0.2.0][] (2024-05-26)
 
 This release has an [MSRV][] of 1.75.
 
@@ -67,10 +67,19 @@ This release has an [MSRV][] of 1.75.
 - MPL 2.0 is no longer a license requirement
 - The root image viewBox clipping was removed, to be added back at a later time
 
-## 0.1 (2024-03-11)
+## [0.1.0][] (2024-03-11)
 
 This release has an [MSRV][] of 1.75.
 
 - Initial release
+
+[@nicoburns]: https://github.com/nicoburns
+
+[#26]: https://github.com/linebender/vello_svg/pull/26
+
+[Unreleased]: https://github.com/linebender/vello_svg/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/linebender/vello_svg/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/linebender/vello_svg/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/linebender/vello_svg/releases/tag/v0.1.0
 
 [MSRV]: README.md#minimum-supported-rust-version-msrv
