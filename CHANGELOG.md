@@ -38,8 +38,7 @@ This release has an [MSRV][] of 1.75.
 
 ### Changed
 
-- Updated to vello 0.2 ([#18] by [@simbleau])
-- Updated to usvg 0.42 ([#18] by [@simbleau])
+- Updated to `vello` 0.2.0 and `usvg` 0.42 ([#18] by [@simbleau])
 - Renamed `render_tree` to `append_tree` ([#18] by [@simbleau])
 - Renamed `render_tree_with` to `append_tree_with` and removed the `Result<(), E>` return type for the error handler. ([#18] by [@simbleau])
 
