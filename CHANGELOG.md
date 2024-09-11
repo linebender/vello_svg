@@ -15,6 +15,10 @@ You can find its changes [documented below](#031-2024-07-29).
 
 This release has an [MSRV][] of 1.75.
 
+### Changed
+
+- Updated to usvg 0.43.0 ([#31] by [@Eoghanmc22])
+
 ## [0.3.1][] (2024-07-29)
 
 This release has an [MSRV][] of 1.75.
