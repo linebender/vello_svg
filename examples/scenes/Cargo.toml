@@ -14,7 +14,6 @@ vello = { workspace = true }
 vello_svg = { path = "../.." }
 anyhow = "1"
 clap = { version = "4.5.1", features = ["derive"] }
-image = "0.24.9"
 rand = "0.8.5"
 instant = "0.1"
 
