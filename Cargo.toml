@@ -38,6 +38,7 @@ vello = { workspace = true }
 thiserror = "1.0.61"
 usvg = "0.43.0"
 image = { version = "0.25.0", default-features = false, features = [
+  "webp",
   "png",
   "jpeg",
   "gif",
