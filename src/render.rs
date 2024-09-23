@@ -102,7 +102,8 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 match img.kind() {
                     usvg::ImageKind::JPEG(_)
                     | usvg::ImageKind::PNG(_)
-                    | usvg::ImageKind::GIF(_) => {
+                    | usvg::ImageKind::GIF(_)
+                    | usvg::ImageKind::WEBP(_) => {
                         let Ok(decoded_image) = util::decode_raw_raster_image(img.kind()) else {
                             error_handler(scene, node);
                             continue;

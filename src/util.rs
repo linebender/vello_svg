@@ -215,6 +215,9 @@ pub fn decode_raw_raster_image(
         usvg::ImageKind::GIF(data) => {
             image::load_from_memory_with_format(data, image::ImageFormat::Gif)
         }
+        usvg::ImageKind::WEBP(data) => {
+            image::load_from_memory_with_format(data, image::ImageFormat::WebP)
+        }
         usvg::ImageKind::SVG(_) => unreachable!(),
     }?
     .into_rgba8();
