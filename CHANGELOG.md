@@ -87,6 +87,7 @@ This release has an [MSRV][] of 1.75.
 
 - Initial release. ([#1] by [@simbleau])
 
+[@Eoghanmc22]: https://github.com/Eoghanmc22
 [@nicoburns]: https://github.com/nicoburns
 [@waywardmonkeys]: https://github.com/waywardmonkeys
 [@simbleau]: https://github.com/simbleau
@@ -94,6 +95,7 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@DasLixou]: https://github.com/DasLixou
 
+[#31]: https://github.com/linebender/vello_svg/pull/31
 [#26]: https://github.com/linebender/vello_svg/pull/26
 [#28]: https://github.com/linebender/vello_svg/pull/28
 [#18]: https://github.com/linebender/vello_svg/pull/18
