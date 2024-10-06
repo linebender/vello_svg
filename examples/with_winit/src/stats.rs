@@ -5,7 +5,7 @@ use scenes::RobotoText;
 use std::collections::VecDeque;
 use vello::kurbo::{Affine, PathEl, Rect, Stroke};
 use vello::peniko::{Brush, Color, Fill};
-use vello::{AaConfig, BumpAllocators, Scene};
+use vello::{AaConfig, Scene};
 
 const SLIDING_WINDOW_SIZE: usize = 100;
 
@@ -26,7 +26,6 @@ impl Snapshot {
         viewport_width: f64,
         viewport_height: f64,
         samples: T,
-        bump: Option<BumpAllocators>,
         vsync: bool,
         aa_config: AaConfig,
     ) where
@@ -47,7 +46,7 @@ impl Snapshot {
             &Rect::new(0., 0., width, height),
         );
 
-        let mut labels = vec![
+        let labels = [
             format!("Frame Time: {:.2} ms", self.frame_time_ms),
             format!("Frame Time (min): {:.2} ms", self.frame_time_min_ms),
             format!("Frame Time (max): {:.2} ms", self.frame_time_max_ms),
@@ -62,16 +61,6 @@ impl Snapshot {
             ),
             format!("Resolution: {viewport_width}x{viewport_height}"),
         ];
-        if let Some(bump) = &bump {
-            if bump.failed >= 1 {
-                labels.push("Allocation Failed!".into());
-            }
-            labels.push(format!("binning: {}", bump.binning));
-            labels.push(format!("ptcl: {}", bump.ptcl));
-            labels.push(format!("tile: {}", bump.tile));
-            labels.push(format!("segments: {}", bump.segments));
-            labels.push(format!("blend: {}", bump.blend));
-        }
 
         // height / 2 is dedicated to the text labels and the rest is filled by the bar graph.
         let text_height = height * 0.5 / (1 + labels.len()) as f64;

@@ -196,7 +196,7 @@ pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) {
     scene.fill(
         Fill::NonZero,
         Affine::IDENTITY,
-        Color::RED.with_alpha_factor(0.5),
+        Color::RED.multiply_alpha(0.5),
         None,
         &rect,
     );
