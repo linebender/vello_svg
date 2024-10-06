@@ -100,6 +100,7 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@DasLixou]: https://github.com/DasLixou
 
+[#34]: https://github.com/linebender/vello_svg/pull/34
 [#31]: https://github.com/linebender/vello_svg/pull/31
 [#26]: https://github.com/linebender/vello_svg/pull/26
 [#28]: https://github.com/linebender/vello_svg/pull/28
