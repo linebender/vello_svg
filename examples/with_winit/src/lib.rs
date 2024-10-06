@@ -12,7 +12,7 @@ use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
-use vello::{wgpu, AaConfig, BumpAllocators, Renderer, RendererOptions, Scene};
+use vello::{wgpu, AaConfig, Renderer, RendererOptions, Scene};
 
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 use winit::window::Window;
@@ -107,9 +107,6 @@ fn run(
     let mut simple_text = RobotoText::new();
     let mut stats = stats::Stats::new();
     let mut stats_shown = true;
-    // Currently not updated in wasm builds
-    #[allow(unused_mut)]
-    let mut scene_complexity: Option<BumpAllocators> = None;
     let mut complexity_shown = false;
     let mut vsync_on = true;
 
@@ -367,7 +364,6 @@ fn run(
                                 width as f64,
                                 height as f64,
                                 stats.samples(),
-                                complexity_shown.then_some(scene_complexity).flatten(),
                                 vsync_on,
                                 antialiasing_method,
                             );
@@ -377,26 +373,6 @@ fn run(
                             .surface
                             .get_current_texture()
                             .expect("failed to get surface texture");
-                        #[cfg(not(target_arch = "wasm32"))]
-                        {
-                            scene_complexity = vello::block_on_wgpu(
-                                &device_handle.device,
-                                renderers[render_state.surface.dev_id]
-                                    .as_mut()
-                                    .unwrap()
-                                    .render_to_surface_async(
-                                        &device_handle.device,
-                                        &device_handle.queue,
-                                        &scene,
-                                        &surface_texture,
-                                        &render_params,
-                                    ),
-                            )
-                            .expect("failed to render to surface");
-                        }
-                        // Note: in the wasm case, we're currently not running the robust
-                        // pipeline, as it requires more async wiring for the readback.
-                        #[cfg(target_arch = "wasm32")]
                         renderers[render_state.surface.dev_id]
                             .as_mut()
                             .unwrap()
