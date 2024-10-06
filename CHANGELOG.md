@@ -15,9 +15,14 @@ You can find its changes [documented below](#031-2024-07-29).
 
 This release has an [MSRV][] of 1.75.
 
+## [0.4.0][] (2024-10-06)
+
+This release has an [MSRV][] of 1.75.
+
 ### Changed
 
 - Updated to usvg 0.43.0 ([#31] by [@Eoghanmc22])
+- Updated to vello 0.3.0 ([#34] by [@nicoburns])
 
 ## [0.3.1][] (2024-07-29)
 
