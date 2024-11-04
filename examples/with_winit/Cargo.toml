@@ -43,4 +43,8 @@ console_error_panic_hook = "0.1.7"
 console_log = "1.0.0"
 wasm-bindgen-futures = "0.4.41"
 web-sys = { version = "0.3.67", features = ["HtmlCollection", "Text"] }
-getrandom = { version = "0.2.12", features = ["js"] }
+
+[target.wasm32-unknown-unknown.dependencies]
+# We have a transitive dependency on getrandom and it does not automatically
+# support wasm32-unknown-unknown. We need to enable the js feature.
+getrandom = { version = "0.2.15", features = ["js"] }
