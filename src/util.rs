@@ -183,7 +183,7 @@ pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, A
     }
 }
 
-/// Error handler function for [`super::render_tree_with`] which draws a transparent red box
+/// Error handler function for [`super::append_tree_with`] which draws a transparent red box
 /// instead of unsupported SVG features
 pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) {
     let bb = node.bounding_box();
