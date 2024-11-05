@@ -1,7 +1,7 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Render an SVG document to a Vello [`Scene`].
+//! Render an SVG document to a Vello [`Scene`](vello::Scene).
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //!
@@ -23,6 +23,8 @@
 //! - path shape-rendering
 //! - patterns
 
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
+
 mod render;
 
 mod error;
@@ -37,7 +39,7 @@ pub use vello;
 pub use usvg;
 use vello::kurbo::Affine;
 
-/// Render a [`Scene`] from an SVG string, with default error handling.
+/// Render a [`Scene`](vello::Scene) from an SVG string, with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
 pub fn render(svg: &str) -> Result<vello::Scene, Error> {
@@ -48,7 +50,7 @@ pub fn render(svg: &str) -> Result<vello::Scene, Error> {
     Ok(scene)
 }
 
-/// Append an SVG to a vello [`Scene`], with default error handling.
+/// Append an SVG to a vello [`Scene`](vello::Scene), with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
 pub fn append(scene: &mut vello::Scene, svg: &str) -> Result<(), Error> {
@@ -58,7 +60,7 @@ pub fn append(scene: &mut vello::Scene, svg: &str) -> Result<(), Error> {
     Ok(())
 }
 
-/// Append an SVG to a vello [`Scene`], with user-provided error handling logic.
+/// Append an SVG to a vello [`Scene`](vello::Scene), with user-provided error handling logic.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
 pub fn append_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
@@ -72,7 +74,7 @@ pub fn append_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
     Ok(())
 }
 
-/// Render a [`Scene`] from a [`usvg::Tree`], with default error handling.
+/// Render a [`Scene`](vello::Scene) from a [`usvg::Tree`], with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
 pub fn render_tree(svg: &usvg::Tree) -> vello::Scene {
@@ -81,14 +83,14 @@ pub fn render_tree(svg: &usvg::Tree) -> vello::Scene {
     scene
 }
 
-/// Append an [`usvg::Tree`]  to a vello [`Scene`], with default error handling.
+/// Append an [`usvg::Tree`] to a vello [`Scene`](vello::Scene), with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
 pub fn append_tree(scene: &mut vello::Scene, svg: &usvg::Tree) {
     append_tree_with(scene, svg, &mut util::default_error_handler);
 }
 
-/// Append an [`usvg::Tree`] to a vello [`Scene`], with user-provided error handling logic.
+/// Append an [`usvg::Tree`] to a vello [`Scene`](vello::Scene), with user-provided error handling logic.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
 pub fn append_tree_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
