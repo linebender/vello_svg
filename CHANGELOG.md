@@ -8,14 +8,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published Vello SVG release is [0.5.0](#050-2024-11-18) which was released on 2024-11-18.
-You can find its changes [documented below](#050-2024-11-18).
+The latest published Vello SVG release is [0.5.0](#050-2024-11-20) which was released on 2024-11-20.
+You can find its changes [documented below](#050-2024-11-20).
 
 ## [Unreleased][]
 
 This release has an [MSRV][] of 1.75.
 
-## [0.5.0][] (2024-11-18)
+## [0.5.0][] (2024-11-20)
 
 This release has an [MSRV][] of 1.75.
 
@@ -87,7 +87,6 @@ This release has an [MSRV][] of 1.75.
 
 - The image viewBox is now properly translated ([#8] by [@simbleau])
 - `vello_svg::render_tree_with` no longer takes a transform parameter. This is to make it consistent with the documentation and `vello_svg::render_tree`. ([#9] by [@simbleau])
-
 
 ### Removed
 
