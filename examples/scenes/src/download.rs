@@ -63,7 +63,7 @@ impl Download {
                         println!(
                             "{} ({}) under license {} from {}",
                             download.name,
-                            byte_unit::Byte::from_bytes(builtin.expected_size.into())
+                            Byte::from_bytes(builtin.expected_size.into())
                                 .get_appropriate_unit(false),
                             builtin.license,
                             builtin.info

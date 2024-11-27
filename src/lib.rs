@@ -23,7 +23,19 @@
 //! - path shape-rendering
 //! - patterns
 
+// LINEBENDER LINT SET - lib.rs - v1
+// See https://linebender.org/wiki/canonical-lints/
+// These lints aren't included in Cargo.toml because they
+// shouldn't apply to examples and tests
+#![warn(unused_crate_dependencies)]
+#![warn(clippy::print_stdout, clippy::print_stderr)]
+// END LINEBENDER LINT SET
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
+// The following lints are part of the Linebender standard set,
+// but resolving them has been deferred for now.
+// Feel free to send a PR that solves one or more of these.
+#![allow(missing_docs, clippy::shadow_unrelated, clippy::missing_errors_doc)]
+#![cfg_attr(test, allow(unused_crate_dependencies))] // Some dev dependencies are only used in tests
 
 mod render;
 
