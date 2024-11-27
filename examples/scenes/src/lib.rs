@@ -1,6 +1,29 @@
 // Copyright 2022 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+//! Scenes
+
+// The following lints are part of the Linebender standard set,
+// but resolving them has been deferred for now.
+// Feel free to send a PR that solves one or more of these.
+#![allow(
+    missing_debug_implementations,
+    missing_docs,
+    single_use_lifetimes,
+    elided_lifetimes_in_paths,
+    unused_macro_rules,
+    unreachable_pub,
+    clippy::use_self,
+    clippy::shadow_unrelated,
+    clippy::partial_pub_fields,
+    clippy::allow_attributes,
+    clippy::allow_attributes_without_reason,
+    clippy::missing_errors_doc,
+    clippy::missing_panics_doc,
+    clippy::missing_assert_message,
+    clippy::wildcard_imports
+)]
+
 #[cfg(not(target_arch = "wasm32"))]
 pub mod download;
 mod simple_text;
@@ -28,7 +51,7 @@ pub struct SceneParams<'a> {
     pub interactive: bool,
     pub text: &'a mut RobotoText,
     pub resolution: Option<Vec2>,
-    pub base_color: Option<vello::peniko::Color>,
+    pub base_color: Option<Color>,
     pub complexity: usize,
 }
 

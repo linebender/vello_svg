@@ -1,6 +1,24 @@
 // Copyright 2022 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
+//! With Winit
+
+// The following lints are part of the Linebender standard set,
+// but resolving them has been deferred for now.
+// Feel free to send a PR that solves one or more of these.
+#![allow(
+    unreachable_pub,
+    missing_docs,
+    clippy::missing_errors_doc,
+    clippy::missing_panics_doc,
+    clippy::cast_possible_truncation,
+    clippy::wildcard_imports,
+    clippy::use_self,
+    clippy::allow_attributes,
+    clippy::allow_attributes_without_reason,
+    clippy::shadow_unrelated
+)]
+
 use instant::Instant;
 use std::collections::HashSet;
 use std::num::NonZeroUsize;
@@ -62,7 +80,7 @@ fn run(
     args: Args,
     mut scenes: SceneSet,
     render_cx: RenderContext,
-    #[cfg(target_arch = "wasm32")] render_state: RenderState,
+    #[cfg(target_arch = "wasm32")] render_state: RenderState<'_>,
 ) {
     use winit::event::*;
     use winit::event_loop::ControlFlow;
@@ -71,7 +89,7 @@ fn run(
     #[cfg(not(target_arch = "wasm32"))]
     let mut render_cx = render_cx;
     #[cfg(not(target_arch = "wasm32"))]
-    let mut render_state = None::<RenderState>;
+    let mut render_state = None::<RenderState<'_>>;
     let use_cpu = args.use_cpu;
     // The design of `RenderContext` forces delayed renderer initialisation to
     // not work on wasm, as WASM futures effectively must be 'static.
@@ -447,7 +465,7 @@ fn run(
                 {}
                 #[cfg(not(target_arch = "wasm32"))]
                 {
-                    let Option::None = render_state else { return };
+                    let None = render_state else { return };
                     let window = cached_window
                         .take()
                         .unwrap_or_else(|| create_window(event_loop));
@@ -566,7 +584,7 @@ pub fn main() -> Result<()> {
                 .and_then(|body| body.append_child(canvas.as_ref()).ok())
                 .expect("couldn't append canvas to document body");
             // Best effort to start with the canvas focused, taking input
-            _ = web_sys::HtmlElement::from(canvas).focus();
+            drop(web_sys::HtmlElement::from(canvas).focus());
             wasm_bindgen_futures::spawn_local(async move {
                 let (width, height, scale_factor) = web_sys::window()
                     .map(|w| {
