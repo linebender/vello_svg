@@ -105,11 +105,11 @@ image = { version = "0.25.5", default-features = false, features = [ "webp", "pn
 wasm-bindgen-test = "0.3.49"
 
 [features]
-default = ["image", "png", "gif", "jpeg", "webp"]
+default = ["image", "image_format_png", "image_format_gif", "image_format_jpeg", "image_format_webp"]
 # Enables the wgpu feature on vello, which is disabled by default
 wgpu = ["vello/wgpu"]
 image = ["dep:image"]
-png = ["image", "image/png"]
-jpeg = ["image", "image/jpeg"]
-gif = ["image", "image/gif"]
-webp = ["image", "image/webp"]
+image_format_png = ["image", "image/png"]
+image_format_jpeg = ["image", "image/jpeg"]
+image_format_gif = ["image", "image/gif"]
+image_format_webp = ["image", "image/webp"]
