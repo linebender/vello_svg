@@ -15,6 +15,10 @@ You can find its changes [documented below](#050-2024-11-20).
 
 This release has an [MSRV][] of 1.75.
 
+### Changed
+
+- Feature flag raster image formats (enabled by default) ([#50] by [@nicoburns])
+
 ## [0.5.0][] (2024-11-20)
 
 This release has an [MSRV][] of 1.75.
@@ -107,6 +111,7 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@DasLixou]: https://github.com/DasLixou
 
+[#50]: https://github.com/linebender/vello_svg/pull/50
 [#42]: https://github.com/linebender/vello_svg/pull/42
 [#34]: https://github.com/linebender/vello_svg/pull/34
 [#31]: https://github.com/linebender/vello_svg/pull/31
