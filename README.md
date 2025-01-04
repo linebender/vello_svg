@@ -17,6 +17,16 @@
 > [!WARNING]
 > The goal of this crate is to provide decent coverage of the (large) SVG spec, up to what vello will support, for use in interactive graphics. If you are looking for a correct SVG renderer, see [resvg](https://github.com/RazrFalcon/resvg). See [vello](https://github.com/linebender/vello) for more information about limitations.
 
+## Version compatibility
+
+| vello_svg | vello | usvg | image |
+| --------- | ----- | ---- | ----- | 
+| 0.5       | 0.3   | 0.44 | 0.25  |
+| 0.4       | 0.3   | 0.43 | 0.25  |
+| 0.3       | 0.2   | 0.42 | 0.25  |
+| 0.2       | 0.1   | 0.41 | 0.25  |
+| 0.1       | 0.1   | 0.40 | 0.24  |
+
 ## Examples
 
 ### Cross platform (Winit)
