@@ -98,7 +98,7 @@ workspace = true
 
 [dependencies]
 vello = { workspace = true }
-thiserror = "1.0.69"
+thiserror = "2.0.11"
 usvg = "0.44.0"
 image = { version = "0.25.5", default-features = false, features = [ "webp", "png", "jpeg", "gif"], optional = true }
 
