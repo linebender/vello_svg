@@ -74,7 +74,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.3.0", default-features = false }
+vello = { git = "https://github.com/linebender/vello", rev = "6105e401", default-features = false }
 
 [package]
 name = "vello_svg"

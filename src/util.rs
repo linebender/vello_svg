@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
+use vello::peniko::color::{self, DynamicColor};
 use vello::peniko::{Brush, Color, Fill};
 use vello::Scene;
 
@@ -98,7 +99,7 @@ pub fn into_image(image: image::ImageBuffer<image::Rgba<u8>, Vec<u8>>) -> Image 
     let image_data: Vec<u8> = image.into_vec();
     Image::new(
         Blob::new(std::sync::Arc::new(image_data)),
-        vello::peniko::Format::Rgba8,
+        vello::peniko::ImageFormat::Rgba8,
         width,
         height,
     )
@@ -107,7 +108,7 @@ pub fn into_image(image: image::ImageBuffer<image::Rgba<u8>, Vec<u8>>) -> Image 
 pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, Affine)> {
     match paint {
         usvg::Paint::Color(color) => Some((
-            Brush::Solid(Color::rgba8(
+            Brush::Solid(Color::from_rgba8(
                 color.red,
                 color.green,
                 color.blue,
@@ -119,14 +120,14 @@ pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, A
             let stops: Vec<vello::peniko::ColorStop> = gr
                 .stops()
                 .iter()
-                .map(|stop| {
-                    let mut cstop = vello::peniko::ColorStop::default();
-                    cstop.color.r = stop.color().red;
-                    cstop.color.g = stop.color().green;
-                    cstop.color.b = stop.color().blue;
-                    cstop.color.a = (stop.opacity() * opacity).to_u8();
-                    cstop.offset = stop.offset().get();
-                    cstop
+                .map(|stop| vello::peniko::ColorStop {
+                    offset: stop.offset().get(),
+                    color: DynamicColor::from_alpha_color(Color::from_rgba8(
+                        stop.color().red,
+                        stop.color().green,
+                        stop.color().blue,
+                        (stop.opacity() * opacity).to_u8(),
+                    )),
                 })
                 .collect();
             let start = Point::new(gr.x1() as f64, gr.y1() as f64);
@@ -149,14 +150,14 @@ pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, A
             let stops: Vec<vello::peniko::ColorStop> = gr
                 .stops()
                 .iter()
-                .map(|stop| {
-                    let mut cstop = vello::peniko::ColorStop::default();
-                    cstop.color.r = stop.color().red;
-                    cstop.color.g = stop.color().green;
-                    cstop.color.b = stop.color().blue;
-                    cstop.color.a = (stop.opacity() * opacity).to_u8();
-                    cstop.offset = stop.offset().get();
-                    cstop
+                .map(|stop| vello::peniko::ColorStop {
+                    offset: stop.offset().get(),
+                    color: DynamicColor::from_alpha_color(Color::from_rgba8(
+                        stop.color().red,
+                        stop.color().green,
+                        stop.color().blue,
+                        (stop.opacity() * opacity).to_u8(),
+                    )),
                 })
                 .collect();
 
@@ -200,7 +201,7 @@ pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) {
     scene.fill(
         Fill::NonZero,
         Affine::IDENTITY,
-        Color::RED.multiply_alpha(0.5),
+        color::palette::css::RED.multiply_alpha(0.5),
         None,
         &rect,
     );
