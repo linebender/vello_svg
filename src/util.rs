@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
-use vello::peniko::color::{self, DynamicColor};
+use vello::peniko::color::{palette, DynamicColor};
 use vello::peniko::{Brush, Color, Fill};
 use vello::Scene;
 
@@ -201,7 +201,7 @@ pub fn default_error_handler(scene: &mut Scene, node: &usvg::Node) {
     scene.fill(
         Fill::NonZero,
         Affine::IDENTITY,
-        color::palette::css::RED.multiply_alpha(0.5),
+        palette::css::RED.with_alpha(0.5),
         None,
         &rect,
     );

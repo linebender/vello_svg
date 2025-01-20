@@ -10,7 +10,7 @@ license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/vello_svg"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml, with the relevant README.md files
 # and with the MSRV in the `Unreleased` section of CHANGELOG.md.
-rust-version = "1.75"
+rust-version = "1.82"
 
 [workspace.lints]
 # LINEBENDER LINT SET - Cargo.toml - v2
@@ -74,7 +74,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { git = "https://github.com/linebender/vello", rev = "6105e401", default-features = false }
+vello = "0.4.0"
 
 [package]
 name = "vello_svg"

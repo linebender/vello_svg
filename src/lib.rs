@@ -34,8 +34,13 @@
 // The following lints are part of the Linebender standard set,
 // but resolving them has been deferred for now.
 // Feel free to send a PR that solves one or more of these.
-#![allow(missing_docs, clippy::shadow_unrelated, clippy::missing_errors_doc)]
-#![cfg_attr(test, allow(unused_crate_dependencies))] // Some dev dependencies are only used in tests
+#![allow(
+    missing_docs,
+    clippy::shadow_unrelated,
+    clippy::missing_errors_doc,
+    reason = "Deferred"
+)]
+#![cfg_attr(test, allow(unused_crate_dependencies, reason = "Deferred"))] // Some dev dependencies are only used in tests
 
 mod render;
 
