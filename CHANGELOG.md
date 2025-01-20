@@ -13,11 +13,12 @@ You can find its changes [documented below](#050-2024-11-20).
 
 ## [Unreleased][]
 
-This release has an [MSRV][] of 1.75.
+This release has an [MSRV][] of 1.82.
 
 ### Changed
 
 - Feature flag raster image formats (enabled by default) ([#50] by [@nicoburns])
+- Updated to Vello 0.4.0 ([#53][] by [@nicoburns][] and [@waywardmonkeys][])
 
 ## [0.5.0][] (2024-11-20)
 
