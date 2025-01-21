@@ -2,12 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use std::sync::Arc;
+
+use skrifa::{
+    raw::{FileRef, FontRef},
+    MetadataProvider,
+};
 use vello::kurbo::Affine;
-use vello::peniko::{Blob, Brush, BrushRef, Font, StyleRef};
-use vello::skrifa::raw::FontRef;
-use vello::skrifa::MetadataProvider;
-use vello::Glyph;
-use vello::Scene;
+use vello::peniko::{color::palette, Blob, Brush, BrushRef, Fill, Font, StyleRef};
+use vello::{Glyph, Scene};
 
 // This is very much a hack to get things working.
 // On Windows, can set this to "c:\\Windows\\Fonts\\seguiemj.ttf" to get color
@@ -69,7 +71,7 @@ impl RobotoText {
         let brush = brush.into();
         let style = style.into();
         let axes = font_ref.axes();
-        let font_size = vello::skrifa::instance::Size::new(size);
+        let font_size = skrifa::instance::Size::new(size);
         let var_loc = axes.location(variations.iter().copied());
         let charmap = font_ref.charmap();
         let metrics = font_ref.metrics(font_size, &var_loc);
@@ -82,7 +84,7 @@ impl RobotoText {
             .font_size(size)
             .transform(transform)
             .glyph_transform(glyph_transform)
-            .normalized_coords(var_loc.coords())
+            .normalized_coords(bytemuck::cast_slice(var_loc.coords()))
             .brush(brush)
             .draw(
                 style,
@@ -114,8 +116,7 @@ impl RobotoText {
         transform: Affine,
         text: &str,
     ) {
-        use vello::peniko::{Color, Fill};
-        let brush = brush.unwrap_or(&Brush::Solid(Color::WHITE));
+        let brush = brush.unwrap_or(&Brush::Solid(palette::css::WHITE));
         self.add_run(
             scene,
             font,
@@ -130,7 +131,6 @@ impl RobotoText {
 }
 
 fn to_font_ref(font: &Font) -> Option<FontRef<'_>> {
-    use vello::skrifa::raw::FileRef;
     let file_ref = FileRef::new(font.data.as_ref()).ok()?;
     match file_ref {
         FileRef::Font(font) => Some(font),

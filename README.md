@@ -7,7 +7,7 @@
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23gpu-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/stream/197075-gpu)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](#license)
-[![vello version](https://img.shields.io/badge/vello-v0.3.0-purple.svg)](https://crates.io/crates/vello)\
+[![vello version](https://img.shields.io/badge/vello-v0.4.0-purple.svg)](https://crates.io/crates/vello)\
 [![Crates.io](https://img.shields.io/crates/v/vello_svg.svg)](https://crates.io/crates/vello_svg)
 [![Docs](https://docs.rs/vello_svg/badge.svg)](https://docs.rs/vello_svg)
 [![Build status](https://github.com/linebender/vello_svg/workflows/CI/badge.svg)](https://github.com/linebender/vello_svg/actions)
@@ -63,7 +63,7 @@ There is also a web demo [available here](https://linebender.github.io/vello_svg
 
 ## Minimum supported Rust Version (MSRV)
 
-This version of Vello SVG has been verified to compile with **Rust 1.75** and later.
+This version of Vello SVG has been verified to compile with **Rust 1.82** and later.
 
 Future versions of Vello SVG might increase the Rust version requirement.
 It will not be treated as a breaking change and as such can even happen with small patch releases.

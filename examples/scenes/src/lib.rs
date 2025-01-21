@@ -31,7 +31,7 @@ mod svg;
 mod test_scenes;
 use std::path::PathBuf;
 
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use clap::{Args, Subcommand};
 #[cfg(not(target_arch = "wasm32"))]
 use download::Download;
@@ -40,7 +40,7 @@ pub use svg::{default_scene, scene_from_files};
 pub use test_scenes::test_scenes;
 
 use vello::kurbo::Vec2;
-use vello::peniko::Color;
+use vello::peniko::{color, Color};
 use vello::Scene;
 
 pub struct SceneParams<'a> {
@@ -146,6 +146,6 @@ impl Command {
     }
 }
 
-fn parse_color(s: &str) -> Result<Color> {
-    Color::parse(s).ok_or(anyhow!("'{s}' is not a valid color"))
+fn parse_color(s: &str) -> Result<Color, color::ParseError> {
+    color::parse_color(s).map(|c| c.to_alpha_color())
 }

@@ -13,8 +13,10 @@ workspace = true
 vello = { workspace = true }
 vello_svg = { path = "../.." }
 anyhow = "1"
+bytemuck = { version = "1.21.0", features = ["derive"] }
 clap = { version = "4.5.1", features = ["derive"] }
 rand = "0.8.5"
+skrifa = "0.26.4"
 instant = "0.1"
 
 # Used for the `download` command
