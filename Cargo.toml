@@ -87,6 +87,19 @@ license.workspace = true
 edition.workspace = true
 repository.workspace = true
 
+exclude = [
+    ".github",
+    ".clippy.toml",
+    ".gitignore",
+    ".typos.toml",
+    ".cargo",
+    # The examples folder contains our example packages, not any direct examples for this package
+    "examples/",
+    # Given that this has .gitkeep, I assume that the plan is to use it to store screenshots?
+    "tests",
+    "rustfmt.toml",
+]
+
 [package.metadata.docs.rs]
 all-features = true
 # There are no platform specific docs.
