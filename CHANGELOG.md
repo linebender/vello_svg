@@ -8,10 +8,14 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published Vello SVG release is [0.5.0](#050-2024-11-20) which was released on 2024-11-20.
-You can find its changes [documented below](#050-2024-11-20).
+The latest published Vello SVG release is [0.6.0](#060-2025-01-21) which was released on 2025-01-21.
+You can find its changes [documented below](#060-2025-01-21).
 
 ## [Unreleased][]
+
+This release has an [MSRV][] of 1.82.
+
+## [0.6.0][] (2025-01-21)
 
 This release has an [MSRV][] of 1.82.
 
@@ -112,6 +116,7 @@ This release has an [MSRV][] of 1.75.
 [@MarijnS95]: https://github.com/MarijnS95
 [@DasLixou]: https://github.com/DasLixou
 
+[#53]: https://github.com/linebender/vello_svg/pull/53
 [#50]: https://github.com/linebender/vello_svg/pull/50
 [#42]: https://github.com/linebender/vello_svg/pull/42
 [#34]: https://github.com/linebender/vello_svg/pull/34
@@ -126,7 +131,8 @@ This release has an [MSRV][] of 1.75.
 [#6]: https://github.com/linebender/vello_svg/pull/6
 [#1]: https://github.com/linebender/vello_svg/pull/1
 
-[Unreleased]: https://github.com/linebender/vello_svg/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/linebender/vello_svg/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/linebender/vello_svg/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/linebender/vello_svg/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/linebender/vello_svg/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/linebender/vello_svg/compare/v0.3.0...v0.3.1
