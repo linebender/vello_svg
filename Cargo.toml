@@ -113,7 +113,12 @@ workspace = true
 vello = { workspace = true }
 thiserror = "2.0.11"
 usvg = "0.44.0"
-image = { version = "0.25.5", default-features = false, features = [ "webp", "png", "jpeg", "gif"], optional = true }
+image = { version = "0.25.5", default-features = false, features = [
+    "webp",
+    "png",
+    "jpeg",
+    "gif",
+], optional = true }
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
 wasm-bindgen-test = "0.3.49"
