@@ -16,29 +16,68 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
         let transform = transform * util::to_affine(&node.abs_transform());
         match node {
             usvg::Node::Group(g) => {
-                let mut pushed_clip = false;
-                if let Some(clip_path) = g.clip_path() {
-                    if let Some(usvg::Node::Path(clip_path)) = clip_path.root().children().first() {
-                        // support clip-path with a single path
+                let alpha = g.opacity().get();
+                let mix = match g.blend_mode() {
+                    usvg::BlendMode::Normal => match alpha < 1.0 {
+                        true => vello::peniko::Mix::Normal,
+                        false => vello::peniko::Mix::Clip,
+                    },
+                    usvg::BlendMode::Multiply => vello::peniko::Mix::Multiply,
+                    usvg::BlendMode::Screen => vello::peniko::Mix::Screen,
+                    usvg::BlendMode::Overlay => vello::peniko::Mix::Overlay,
+                    usvg::BlendMode::Darken => vello::peniko::Mix::Darken,
+                    usvg::BlendMode::Lighten => vello::peniko::Mix::Lighten,
+                    usvg::BlendMode::ColorDodge => vello::peniko::Mix::ColorDodge,
+                    usvg::BlendMode::ColorBurn => vello::peniko::Mix::ColorBurn,
+                    usvg::BlendMode::HardLight => vello::peniko::Mix::HardLight,
+                    usvg::BlendMode::SoftLight => vello::peniko::Mix::SoftLight,
+                    usvg::BlendMode::Difference => vello::peniko::Mix::Difference,
+                    usvg::BlendMode::Exclusion => vello::peniko::Mix::Exclusion,
+                    usvg::BlendMode::Hue => vello::peniko::Mix::Hue,
+                    usvg::BlendMode::Saturation => vello::peniko::Mix::Saturation,
+                    usvg::BlendMode::Color => vello::peniko::Mix::Color,
+                    usvg::BlendMode::Luminosity => vello::peniko::Mix::Luminosity,
+                };
+
+                match g
+                    .clip_path()
+                    // support clip-path with a single path
+                    .and_then(|path| path.root().children().first())
+                {
+                    Some(usvg::Node::Path(clip_path)) => {
                         let local_path = util::to_bez_path(clip_path);
                         scene.push_layer(
                             BlendMode {
-                                mix: vello::peniko::Mix::Clip,
+                                mix,
                                 compose: vello::peniko::Compose::SrcOver,
                             },
-                            1.0,
+                            alpha,
                             transform,
                             &local_path,
                         );
-                        pushed_clip = true;
+                    }
+                    _ => {
+                        // Use bounding box as the clip path.
+                        let bounding_box = g.layer_bounding_box();
+                        let rect = vello::kurbo::Rect::from_origin_size(
+                            (bounding_box.x(), bounding_box.y()),
+                            (bounding_box.width() as f64, bounding_box.height() as f64),
+                        );
+                        scene.push_layer(
+                            BlendMode {
+                                mix,
+                                compose: vello::peniko::Compose::SrcOver,
+                            },
+                            alpha,
+                            transform,
+                            &rect,
+                        );
                     }
                 }
 
                 render_group(scene, g, Affine::IDENTITY, error_handler);
 
-                if pushed_clip {
-                    scene.pop_layer();
-                }
+                scene.pop_layer();
             }
             usvg::Node::Path(path) => {
                 if !path.is_visible() {
@@ -49,7 +88,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 let do_fill = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(fill) = &path.fill() {
                         if let Some((brush, brush_transform)) =
-                            util::to_brush(fill.paint(), fill.opacity() * group.opacity())
+                            util::to_brush(fill.paint(), fill.opacity())
                         {
                             scene.fill(
                                 match fill.rule() {
@@ -69,7 +108,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 let do_stroke = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(stroke) = &path.stroke() {
                         if let Some((brush, brush_transform)) =
-                            util::to_brush(stroke.paint(), stroke.opacity() * group.opacity())
+                            util::to_brush(stroke.paint(), stroke.opacity())
                         {
                             let conv_stroke = util::to_stroke(stroke);
                             scene.stroke(

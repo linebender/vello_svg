@@ -23,6 +23,9 @@ This release has an [MSRV][] of 1.85.
 
 - Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
 
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`.
+- Support group opacity.
+
 ## [0.6.0][] (2025-01-21)
 
 This release has an [MSRV][] of 1.82.
