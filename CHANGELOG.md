@@ -15,6 +15,9 @@ You can find its changes [documented below](#060-2025-01-21).
 
 This release has an [MSRV][] of 1.82.
 
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`.
+- Support group opacity.
+
 ## [0.6.0][] (2025-01-21)
 
 This release has an [MSRV][] of 1.82.
