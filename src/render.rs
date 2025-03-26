@@ -48,41 +48,39 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
 
                 let do_fill = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(fill) = &path.fill() {
-                        match util::to_brush(fill.paint(), fill.opacity()) {
-                            Some((brush, brush_transform)) => {
-                                scene.fill(
-                                    match fill.rule() {
-                                        usvg::FillRule::NonZero => Fill::NonZero,
-                                        usvg::FillRule::EvenOdd => Fill::EvenOdd,
-                                    },
-                                    transform,
-                                    &brush,
-                                    Some(brush_transform),
-                                    &local_path,
-                                );
-                            }
-                            _ => {
-                                error_handler(scene, node);
-                            }
+                        if let Some((brush, brush_transform)) =
+                            util::to_brush(fill.paint(), fill.opacity() * group.opacity())
+                        {
+                            scene.fill(
+                                match fill.rule() {
+                                    usvg::FillRule::NonZero => Fill::NonZero,
+                                    usvg::FillRule::EvenOdd => Fill::EvenOdd,
+                                },
+                                transform,
+                                &brush,
+                                Some(brush_transform),
+                                &local_path,
+                            );
+                        } else {
+                            error_handler(scene, node);
                         }
                     }
                 };
                 let do_stroke = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(stroke) = &path.stroke() {
-                        match util::to_brush(stroke.paint(), stroke.opacity()) {
-                            Some((brush, brush_transform)) => {
-                                let conv_stroke = util::to_stroke(stroke);
-                                scene.stroke(
-                                    &conv_stroke,
-                                    transform,
-                                    &brush,
-                                    Some(brush_transform),
-                                    &local_path,
-                                );
-                            }
-                            _ => {
-                                error_handler(scene, node);
-                            }
+                        if let Some((brush, brush_transform)) =
+                            util::to_brush(stroke.paint(), stroke.opacity() * group.opacity())
+                        {
+                            let conv_stroke = util::to_stroke(stroke);
+                            scene.stroke(
+                                &conv_stroke,
+                                transform,
+                                &brush,
+                                Some(brush_transform),
+                                &local_path,
+                            );
+                        } else {
+                            error_handler(scene, node);
                         }
                     }
                 };
