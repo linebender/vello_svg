@@ -49,7 +49,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 let do_fill = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(fill) = &path.fill() {
                         if let Some((brush, brush_transform)) =
-                            util::to_brush(fill.paint(), fill.opacity())
+                            util::to_brush(fill.paint(), fill.opacity() * group.opacity())
                         {
                             scene.fill(
                                 match fill.rule() {
@@ -69,7 +69,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 let do_stroke = |scene: &mut Scene, error_handler: &mut F| {
                     if let Some(stroke) = &path.stroke() {
                         if let Some((brush, brush_transform)) =
-                            util::to_brush(stroke.paint(), stroke.opacity())
+                            util::to_brush(stroke.paint(), stroke.opacity() * group.opacity())
                         {
                             let conv_stroke = util::to_stroke(stroke);
                             scene.stroke(
