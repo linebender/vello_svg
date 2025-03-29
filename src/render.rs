@@ -18,10 +18,13 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
             usvg::Node::Group(g) => {
                 let alpha = g.opacity().get();
                 let mix = match g.blend_mode() {
-                    usvg::BlendMode::Normal => match alpha < 1.0 {
-                        true => vello::peniko::Mix::Normal,
-                        false => vello::peniko::Mix::Clip,
-                    },
+                    usvg::BlendMode::Normal => {
+                        if alpha < 1.0 {
+                            vello::peniko::Mix::Normal
+                        } else {
+                            vello::peniko::Mix::Clip
+                        }
+                    }
                     usvg::BlendMode::Multiply => vello::peniko::Mix::Multiply,
                     usvg::BlendMode::Screen => vello::peniko::Mix::Screen,
                     usvg::BlendMode::Overlay => vello::peniko::Mix::Overlay,
