@@ -42,7 +42,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                     usvg::BlendMode::Luminosity => vello::peniko::Mix::Luminosity,
                 };
 
-                match g
+                let clipped = match g
                     .clip_path()
                     // support clip-path with a single path
                     .and_then(|path| path.root().children().first())
@@ -58,8 +58,11 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                             transform,
                             &local_path,
                         );
+
+                        true
                     }
-                    _ => {
+                    // Ignore if we're in `Mix::Clip` mode and there's nothing to clip.
+                    _ if !matches!(mix, vello::peniko::Mix::Clip) => {
                         // Use bounding box as the clip path.
                         let bounding_box = g.layer_bounding_box();
                         let rect = vello::kurbo::Rect::from_origin_size(
@@ -75,12 +78,17 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                             transform,
                             &rect,
                         );
+
+                        true
                     }
-                }
+                    _ => false,
+                };
 
                 render_group(scene, g, Affine::IDENTITY, error_handler);
 
-                scene.pop_layer();
+                if clipped {
+                    scene.pop_layer();
+                }
             }
             usvg::Node::Path(path) => {
                 if !path.is_visible() {
