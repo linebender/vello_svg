@@ -386,23 +386,42 @@ fn run(
                                 antialiasing_method,
                             );
                         }
-                        let surface_texture = render_state
-                            .surface
-                            .surface
-                            .get_current_texture()
-                            .expect("failed to get surface texture");
+
                         renderers[render_state.surface.dev_id]
                             .as_mut()
                             .unwrap()
-                            .render_to_surface(
+                            .render_to_texture(
                                 &device_handle.device,
                                 &device_handle.queue,
                                 &scene,
-                                &surface_texture,
+                                &render_state.surface.target_view,
                                 &render_params,
                             )
                             .expect("failed to render to surface");
+                        
+                        let surface_texture = render_state.surface
+                            .surface
+                            .get_current_texture()
+                            .expect("failed to get surface texture");
+                        // Perform the copy
+                        // (TODO: Does it improve throughput to acquire the surface after the previous texture render has happened?)
+                        let mut encoder =
+                            device_handle
+                                .device
+                                .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                                    label: Some("Surface Blit"),
+                                });
+                        render_state.surface.blitter.copy(
+                            &device_handle.device,
+                            &mut encoder,
+                            &render_state.surface.target_view,
+                            &surface_texture
+                                .texture
+                                .create_view(&wgpu::TextureViewDescriptor::default()),
+                        );
+                        device_handle.queue.submit([encoder.finish()]);
                         surface_texture.present();
+
                         device_handle.device.poll(wgpu::Maintain::Poll);
 
                         let new_time = Instant::now();
@@ -488,10 +507,11 @@ fn run(
                             let renderer = Renderer::new(
                                 &render_cx.devices[id].device,
                                 RendererOptions {
-                                    surface_format: Some(render_state.surface.format),
+                                    // surface_format: Some(render_state.surface.format),
                                     use_cpu,
                                     antialiasing_support: vello::AaSupport::all(),
                                     num_init_threads: NonZeroUsize::new(args.num_init_threads),
+                                    pipeline_cache: None
                                 },
                             )
                             .expect("Could create renderer");
