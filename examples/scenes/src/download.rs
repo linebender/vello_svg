@@ -4,7 +4,7 @@
 use std::io::Seek;
 use std::path::{Path, PathBuf};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use byte_unit::Byte;
 use clap::Args;
 use inquire::Confirm;
@@ -71,8 +71,7 @@ impl Download {
                     }
 
                     // For rustfmt, split prompt into its own line
-                    const PROMPT: &str =
-                "Would you like to download a set of default svg files, as explained above?";
+                    const PROMPT: &str = "Would you like to download a set of default svg files, as explained above?";
                     accepted = Confirm::new(PROMPT).with_default(false).prompt()?;
                 } else {
                     println!("Nothing to download! All default downloads already created");
