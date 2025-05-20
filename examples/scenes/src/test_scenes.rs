@@ -15,7 +15,7 @@ macro_rules! scene {
     ($name: ident: $animated: literal) => {
         scene!($name, stringify!($name), $animated)
     };
-    ($func:expr_2021, $name: expr_2021, $animated: literal) => {
+    ($func:expr, $name: expr, $animated: literal) => {
         ExampleScene {
             config: SceneConfig {
                 animated: $animated,
