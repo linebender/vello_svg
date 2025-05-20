@@ -30,7 +30,7 @@ use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
-use vello::{wgpu, AaConfig, Renderer, RendererOptions, Scene};
+use vello::{AaConfig, Renderer, RendererOptions, Scene, wgpu};
 
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 use winit::window::Window;

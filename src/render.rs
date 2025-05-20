@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::util;
+use vello::Scene;
 use vello::kurbo::Affine;
 use vello::peniko::{BlendMode, Fill};
-use vello::Scene;
 
 pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
     scene: &mut Scene,
