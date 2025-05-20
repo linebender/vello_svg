@@ -405,12 +405,11 @@ fn run(
                             .expect("failed to get current texture");
 
                         // Perform the copy.
-                        let mut encoder =
-                            device_handle
-                                .device
-                                .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-                                    label: Some("Surface Blit"),
-                                });
+                        let mut encoder = device_handle.device.create_command_encoder(
+                            &wgpu::CommandEncoderDescriptor {
+                                label: Some("Surface Blit"),
+                            },
+                        );
 
                         surface.blitter.copy(
                             &device_handle.device,
