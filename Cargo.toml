@@ -74,7 +74,7 @@ clippy.wildcard_dependencies = "warn"
 
 [workspace.dependencies]
 # NOTE: Make sure to keep this in sync with the version badge in README.md
-vello = { version = "0.4.0", default-features = false }
+vello = { version = "0.5.0", default-features = false }
 
 [package]
 name = "vello_svg"
@@ -112,7 +112,7 @@ workspace = true
 [dependencies]
 vello = { workspace = true }
 thiserror = "2.0.11"
-usvg = "0.44.0"
+usvg = "0.45.1"
 image = { version = "0.25.5", default-features = false, features = [
     "webp",
     "png",
