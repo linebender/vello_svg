@@ -6,8 +6,8 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Ok, Result};
 use instant::Instant;
-use vello::Scene;
 use vello::kurbo::Vec2;
+use vello::Scene;
 use vello_svg::usvg;
 
 use crate::{ExampleScene, SceneParams, SceneSet};

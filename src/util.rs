@@ -1,10 +1,10 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-use vello::Scene;
 use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
-use vello::peniko::color::{DynamicColor, palette};
+use vello::peniko::color::{palette, DynamicColor};
 use vello::peniko::{Brush, Color, Fill};
+use vello::Scene;
 
 #[cfg(feature = "image")]
 use vello::peniko::{Blob, Image};
