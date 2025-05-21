@@ -21,6 +21,7 @@
 
 | vello_svg | vello | usvg | image |
 | --------- | ----- | ---- | ----- |
+| 0.7       | 0.5   | 0.45 | 0.25  |
 | 0.6       | 0.4   | 0.44 | 0.25  |
 | 0.5       | 0.3   | 0.44 | 0.25  |
 | 0.4       | 0.3   | 0.43 | 0.25  |
@@ -64,7 +65,7 @@ There is also a web demo [available here](https://linebender.github.io/vello_svg
 
 ## Minimum supported Rust Version (MSRV)
 
-This version of Vello SVG has been verified to compile with **Rust 1.82** and later.
+This version of Vello SVG has been verified to compile with **Rust 1.85** and later.
 
 Future versions of Vello SVG might increase the Rust version requirement.
 It will not be treated as a breaking change and as such can even happen with small patch releases.

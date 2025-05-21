@@ -30,7 +30,7 @@ use scenes::{RobotoText, SceneParams, SceneSet};
 use vello::kurbo::{Affine, Vec2};
 use vello::peniko::Color;
 use vello::util::{RenderContext, RenderSurface};
-use vello::{wgpu, AaConfig, Renderer, RendererOptions, Scene};
+use vello::{AaConfig, Renderer, RendererOptions, Scene, wgpu};
 
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 use winit::window::Window;
@@ -102,12 +102,12 @@ fn run(
         let renderer = Renderer::new(
             &render_cx.devices[id].device,
             RendererOptions {
-                surface_format: Some(render_state.surface.format),
                 use_cpu,
                 antialiasing_support: vello::AaSupport::all(),
                 // We currently initialise on one thread on WASM, but mark this here
                 // anyway
                 num_init_threads: NonZeroUsize::new(1),
+                pipeline_cache: None,
             },
         )
         .expect("Could create renderer");
@@ -386,22 +386,41 @@ fn run(
                                 antialiasing_method,
                             );
                         }
-                        let surface_texture = render_state
-                            .surface
-                            .surface
-                            .get_current_texture()
-                            .expect("failed to get surface texture");
+                        let surface = &render_state.surface;
                         renderers[render_state.surface.dev_id]
                             .as_mut()
                             .unwrap()
-                            .render_to_surface(
+                            .render_to_texture(
                                 &device_handle.device,
                                 &device_handle.queue,
                                 &scene,
-                                &surface_texture,
+                                &surface.target_view,
                                 &render_params,
                             )
-                            .expect("failed to render to surface");
+                            .expect("failed to render to texture");
+
+                        let surface_texture = surface
+                            .surface
+                            .get_current_texture()
+                            .expect("failed to get current texture");
+
+                        // Perform the copy.
+                        let mut encoder = device_handle.device.create_command_encoder(
+                            &wgpu::CommandEncoderDescriptor {
+                                label: Some("Surface Blit"),
+                            },
+                        );
+
+                        surface.blitter.copy(
+                            &device_handle.device,
+                            &mut encoder,
+                            &surface.target_view,
+                            &surface_texture
+                                .texture
+                                .create_view(&wgpu::TextureViewDescriptor::default()),
+                        );
+
+                        device_handle.queue.submit([encoder.finish()]);
                         surface_texture.present();
                         device_handle.device.poll(wgpu::Maintain::Poll);
 
@@ -488,10 +507,10 @@ fn run(
                             let renderer = Renderer::new(
                                 &render_cx.devices[id].device,
                                 RendererOptions {
-                                    surface_format: Some(render_state.surface.format),
                                     use_cpu,
                                     antialiasing_support: vello::AaSupport::all(),
                                     num_init_threads: NonZeroUsize::new(args.num_init_threads),
+                                    pipeline_cache: None,
                                 },
                             )
                             .expect("Could create renderer");
@@ -624,7 +643,7 @@ pub fn main() -> Result<()> {
 use winit::platform::android::activity::AndroidApp;
 
 #[cfg(target_os = "android")]
-#[no_mangle]
+#[unsafe(no_mangle)]
 fn android_main(app: AndroidApp) {
     use winit::platform::android::EventLoopBuilderExtAndroid;
 
