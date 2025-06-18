@@ -13,13 +13,9 @@ You can find its changes [documented below](#070-2025-05-21).
 
 ## [Unreleased][]
 
-## Changed
-
-- Corrects kx and ky when transforming usvg::Transform to kurbo::Affine to align rotations correctly. ([#63][] by [@RobertBrewitz][])
-
 ## Fixed
 
-- Svg rotations are now correctly handled. ([#63][] by [@RobertBrewitz][])
+- Svg rotations are now correctly handled (Corrects kx and ky when transforming usvg::Transform to kurbo::Affine) ([#63][] by [@RobertBrewitz][])
 
 This release has an [MSRV][] of 1.85.
 
