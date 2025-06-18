@@ -1,3 +1,6 @@
+// Copyright 2023 the Vello Authors
+// SPDX-License-Identifier: Apache-2.0 OR MIT
+
 #![allow(missing_docs, reason = "regression test for util::to_affine")]
 #[cfg(test)]
 pub mod util_to_affine_test {
