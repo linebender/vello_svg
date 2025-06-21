@@ -2930,7 +2930,7 @@ dependencies = [
 
 [[package]]
 name = "vello_svg"
-version = "0.7.0"
+version = "0.7.1"
 dependencies = [
  "image",
  "thiserror 2.0.12",
