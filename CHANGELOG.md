@@ -8,16 +8,20 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published Vello SVG release is [0.7.0](#070-2025-05-21) which was released on 2025-05-21.
-You can find its changes [documented below](#070-2025-05-21).
+The latest published Vello SVG release is [0.7.1](#071-2025-06-21) which was released on 2025-06-21.
+You can find its changes [documented below](#071-2025-06-21).
 
 ## [Unreleased][]
+
+This release has an [MSRV][] of 1.85.
+
+## [0.7.1][] (2025-06-21)
+
+This release has an [MSRV][] of 1.85.
 
 ## Fixed
 
 - Svg rotations are now correctly handled (Corrects kx and ky when transforming usvg::Transform to kurbo::Affine) ([#63][] by [@RobertBrewitz][])
-
-This release has an [MSRV][] of 1.85.
 
 ## [0.7.0][] (2025-05-21)
 
