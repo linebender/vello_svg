@@ -19,7 +19,12 @@ This release has an [MSRV][] of 1.85.
 
 This release has an [MSRV][] of 1.85.
 
-## Fixed
+### Changed
+
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61] by [@nixon-voxell])
+- Support group opacity. ([#61] by [@nixon-voxell])
+
+### Fixed
 
 - Svg rotations are now correctly handled (Corrects kx and ky when transforming usvg::Transform to kurbo::Affine) ([#63][] by [@RobertBrewitz][])
 
@@ -27,14 +32,9 @@ This release has an [MSRV][] of 1.85.
 
 This release has an [MSRV][] of 1.85.
 
-## Changed
-
-- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
-
 ### Changed
 
-- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61] by [@nixon-voxell])
-- Support group opacity. ([#61] by [@nixon-voxell])
+- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
 
 ## [0.6.0][] (2025-01-21)
 
