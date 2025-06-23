@@ -21,8 +21,8 @@ This release has an [MSRV][] of 1.85.
 
 ### Changed
 
-- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61] by [@nixon-voxell])
-- Support group opacity. ([#61] by [@nixon-voxell])
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61][] by [@nixon-voxell][])
+- Support group opacity. ([#61][] by [@nixon-voxell][])
 
 ### Fixed
 
@@ -139,6 +139,7 @@ This release has an [MSRV][] of 1.75.
 [@RobertBrewitz]: https://github.com/RobertBrewitz
 
 [#63]: https://github.com/linebender/vello_svg/pull/63
+[#61]: https://github.com/linebender/vello_svg/pull/61
 [#53]: https://github.com/linebender/vello_svg/pull/53
 [#50]: https://github.com/linebender/vello_svg/pull/50
 [#42]: https://github.com/linebender/vello_svg/pull/42
