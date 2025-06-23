@@ -19,7 +19,12 @@ This release has an [MSRV][] of 1.85.
 
 This release has an [MSRV][] of 1.85.
 
-## Fixed
+### Changed
+
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61][] by [@nixon-voxell][])
+- Support group opacity. ([#61][] by [@nixon-voxell][])
+
+### Fixed
 
 - Svg rotations are now correctly handled (Corrects kx and ky when transforming usvg::Transform to kurbo::Affine) ([#63][] by [@RobertBrewitz][])
 
@@ -27,14 +32,9 @@ This release has an [MSRV][] of 1.85.
 
 This release has an [MSRV][] of 1.85.
 
-## Changed
-
-- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
-
 ### Changed
 
-- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61] by [@nixon-voxell])
-- Support group opacity. ([#61] by [@nixon-voxell])
+- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
 
 ## [0.6.0][] (2025-01-21)
 
@@ -139,6 +139,7 @@ This release has an [MSRV][] of 1.75.
 [@RobertBrewitz]: https://github.com/RobertBrewitz
 
 [#63]: https://github.com/linebender/vello_svg/pull/63
+[#61]: https://github.com/linebender/vello_svg/pull/61
 [#53]: https://github.com/linebender/vello_svg/pull/53
 [#50]: https://github.com/linebender/vello_svg/pull/50
 [#42]: https://github.com/linebender/vello_svg/pull/42
