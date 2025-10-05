@@ -8,7 +8,7 @@ use skrifa::{
     raw::{FileRef, FontRef},
 };
 use vello::kurbo::Affine;
-use vello::peniko::{Blob, Brush, BrushRef, Fill, Font, StyleRef, color::palette};
+use vello::peniko::{Blob, Brush, BrushRef, Fill, FontData, StyleRef, color::palette};
 use vello::{Glyph, Scene};
 
 // This is very much a hack to get things working.
@@ -16,14 +16,14 @@ use vello::{Glyph, Scene};
 // emoji
 const ROBOTO_FONT: &[u8] = include_bytes!("../../assets/roboto/Roboto-Regular.ttf");
 pub struct RobotoText {
-    font: Font,
+    font: FontData,
 }
 
 impl RobotoText {
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
-            font: Font::new(Blob::new(Arc::new(ROBOTO_FONT)), 0),
+            font: FontData::new(Blob::new(Arc::new(ROBOTO_FONT)), 0),
         }
     }
 
@@ -31,7 +31,7 @@ impl RobotoText {
     pub fn add_run<'a>(
         &mut self,
         scene: &mut Scene,
-        font: Option<&Font>,
+        font: Option<&FontData>,
         size: f32,
         brush: impl Into<BrushRef<'a>>,
         transform: Affine,
@@ -56,7 +56,7 @@ impl RobotoText {
     pub fn add_var_run<'a>(
         &mut self,
         scene: &mut Scene,
-        font: Option<&Font>,
+        font: Option<&FontData>,
         size: f32,
         variations: &[(&str, f32)],
         brush: impl Into<BrushRef<'a>>,
@@ -110,7 +110,7 @@ impl RobotoText {
     pub fn add(
         &mut self,
         scene: &mut Scene,
-        font: Option<&Font>,
+        font: Option<&FontData>,
         size: f32,
         brush: Option<&Brush>,
         transform: Affine,
@@ -130,7 +130,7 @@ impl RobotoText {
     }
 }
 
-fn to_font_ref(font: &Font) -> Option<FontRef<'_>> {
+fn to_font_ref(font: &FontData) -> Option<FontRef<'_>> {
     let file_ref = FileRef::new(font.data.as_ref()).ok()?;
     match file_ref {
         FileRef::Font(font) => Some(font),
