@@ -30,7 +30,6 @@
 #![warn(unused_crate_dependencies)]
 #![warn(clippy::print_stdout, clippy::print_stderr)]
 // END LINEBENDER LINT SET
-#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 // The following lints are part of the Linebender standard set,
 // but resolving them has been deferred for now.
 // Feel free to send a PR that solves one or more of these.
