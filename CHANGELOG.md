@@ -13,11 +13,11 @@ You can find its changes [documented below](#071-2025-06-21).
 
 ## [Unreleased][]
 
-This release has an [MSRV][] of 1.85.
+This release has an [MSRV][] of 1.86.
 
 ## [0.8.0][] (2025-10-05)
 
-This release has an [MSRV][] of 1.85.
+This release has an [MSRV][] of 1.86.
 
 ### Changed
 
