@@ -15,6 +15,14 @@ You can find its changes [documented below](#071-2025-06-21).
 
 This release has an [MSRV][] of 1.85.
 
+## [0.8.0][] (2025-10-05)
+
+This release has an [MSRV][] of 1.85.
+
+### Changed
+
+- Updated vello to 0.6.0
+
 ## [0.7.1][] (2025-06-21)
 
 This release has an [MSRV][] of 1.85.
@@ -34,7 +42,7 @@ This release has an [MSRV][] of 1.85.
 
 ### Changed
 
-- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][]))
+- Updated vello and usvg ([#63][] by [@RobertBrewitz][] and [@simbleau][])
 
 ## [0.6.0][] (2025-01-21)
 
