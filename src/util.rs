@@ -7,7 +7,7 @@ use vello::peniko::color::{DynamicColor, palette};
 use vello::peniko::{Brush, Color, Fill};
 
 #[cfg(feature = "image")]
-use vello::peniko::{Blob, Image};
+use vello::peniko::{Blob, ImageBrush};
 
 pub fn to_affine(ts: &usvg::Transform) -> Affine {
     let usvg::Transform {
@@ -94,15 +94,20 @@ pub fn to_bez_path(path: &usvg::Path) -> BezPath {
 }
 
 #[cfg(feature = "image")]
-pub fn into_image(image: image::ImageBuffer<image::Rgba<u8>, Vec<u8>>) -> Image {
+pub fn into_image(image: image::ImageBuffer<image::Rgba<u8>, Vec<u8>>) -> ImageBrush {
+    use vello::peniko::ImageAlphaType;
+    use vello::peniko::ImageData;
+
     let (width, height) = (image.width(), image.height());
     let image_data: Vec<u8> = image.into_vec();
-    Image::new(
-        Blob::new(std::sync::Arc::new(image_data)),
-        vello::peniko::ImageFormat::Rgba8,
+    ImageData {
+        data: Blob::new(std::sync::Arc::new(image_data)),
+        format: vello::peniko::ImageFormat::Rgba8,
+        alpha_type: ImageAlphaType::AlphaPremultiplied,
         width,
         height,
-    )
+    }
+    .into()
 }
 
 pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, Affine)> {

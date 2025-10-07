@@ -22,6 +22,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                         if alpha < 1.0 {
                             vello::peniko::Mix::Normal
                         } else {
+                            #[expect(deprecated, reason = "Not applicable")]
                             vello::peniko::Mix::Clip
                         }
                     }
@@ -62,6 +63,7 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                         true
                     }
                     // Ignore if we're in `Mix::Clip` mode and there's nothing to clip.
+                    #[expect(deprecated, reason = "Not applicable")]
                     _ if !matches!(mix, vello::peniko::Mix::Clip) => {
                         // Use bounding box as the clip path.
                         let bounding_box = g.layer_bounding_box();
