@@ -4,7 +4,7 @@
 use crate::util;
 use vello::Scene;
 use vello::kurbo::Affine;
-use vello::peniko::{BlendMode, Fill};
+use vello::peniko::{BlendMode, Fill, Style};
 
 pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
     scene: &mut Scene,
@@ -17,30 +17,23 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
         match node {
             usvg::Node::Group(g) => {
                 let alpha = g.opacity().get();
-                let mix = match g.blend_mode() {
-                    usvg::BlendMode::Normal => {
-                        if alpha < 1.0 {
-                            vello::peniko::Mix::Normal
-                        } else {
-                            #[expect(deprecated, reason = "Not applicable")]
-                            vello::peniko::Mix::Clip
-                        }
-                    }
-                    usvg::BlendMode::Multiply => vello::peniko::Mix::Multiply,
-                    usvg::BlendMode::Screen => vello::peniko::Mix::Screen,
-                    usvg::BlendMode::Overlay => vello::peniko::Mix::Overlay,
-                    usvg::BlendMode::Darken => vello::peniko::Mix::Darken,
-                    usvg::BlendMode::Lighten => vello::peniko::Mix::Lighten,
-                    usvg::BlendMode::ColorDodge => vello::peniko::Mix::ColorDodge,
-                    usvg::BlendMode::ColorBurn => vello::peniko::Mix::ColorBurn,
-                    usvg::BlendMode::HardLight => vello::peniko::Mix::HardLight,
-                    usvg::BlendMode::SoftLight => vello::peniko::Mix::SoftLight,
-                    usvg::BlendMode::Difference => vello::peniko::Mix::Difference,
-                    usvg::BlendMode::Exclusion => vello::peniko::Mix::Exclusion,
-                    usvg::BlendMode::Hue => vello::peniko::Mix::Hue,
-                    usvg::BlendMode::Saturation => vello::peniko::Mix::Saturation,
-                    usvg::BlendMode::Color => vello::peniko::Mix::Color,
-                    usvg::BlendMode::Luminosity => vello::peniko::Mix::Luminosity,
+                let blend_mode: BlendMode = match g.blend_mode() {
+                    usvg::BlendMode::Normal => vello::peniko::Mix::Normal.into(),
+                    usvg::BlendMode::Multiply => vello::peniko::Mix::Multiply.into(),
+                    usvg::BlendMode::Screen => vello::peniko::Mix::Screen.into(),
+                    usvg::BlendMode::Overlay => vello::peniko::Mix::Overlay.into(),
+                    usvg::BlendMode::Darken => vello::peniko::Mix::Darken.into(),
+                    usvg::BlendMode::Lighten => vello::peniko::Mix::Lighten.into(),
+                    usvg::BlendMode::ColorDodge => vello::peniko::Mix::ColorDodge.into(),
+                    usvg::BlendMode::ColorBurn => vello::peniko::Mix::ColorBurn.into(),
+                    usvg::BlendMode::HardLight => vello::peniko::Mix::HardLight.into(),
+                    usvg::BlendMode::SoftLight => vello::peniko::Mix::SoftLight.into(),
+                    usvg::BlendMode::Difference => vello::peniko::Mix::Difference.into(),
+                    usvg::BlendMode::Exclusion => vello::peniko::Mix::Exclusion.into(),
+                    usvg::BlendMode::Hue => vello::peniko::Mix::Hue.into(),
+                    usvg::BlendMode::Saturation => vello::peniko::Mix::Saturation.into(),
+                    usvg::BlendMode::Color => vello::peniko::Mix::Color.into(),
+                    usvg::BlendMode::Luminosity => vello::peniko::Mix::Luminosity.into(),
                 };
 
                 let clipped = match g
@@ -50,40 +43,20 @@ pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
                 {
                     Some(usvg::Node::Path(clip_path)) => {
                         let local_path = util::to_bez_path(clip_path);
-                        scene.push_layer(
-                            BlendMode {
-                                mix,
-                                compose: vello::peniko::Compose::SrcOver,
-                            },
-                            alpha,
-                            transform,
-                            &local_path,
-                        );
+                        scene.push_layer(Fill::NonZero, blend_mode, alpha, transform, &local_path);
 
                         true
                     }
-                    // Ignore if we're in `Mix::Clip` mode and there's nothing to clip.
-                    #[expect(deprecated, reason = "Not applicable")]
-                    _ if !matches!(mix, vello::peniko::Mix::Clip) => {
+                    _ => {
                         // Use bounding box as the clip path.
                         let bounding_box = g.layer_bounding_box();
                         let rect = vello::kurbo::Rect::from_origin_size(
                             (bounding_box.x(), bounding_box.y()),
                             (bounding_box.width() as f64, bounding_box.height() as f64),
                         );
-                        scene.push_layer(
-                            BlendMode {
-                                mix,
-                                compose: vello::peniko::Compose::SrcOver,
-                            },
-                            alpha,
-                            transform,
-                            &rect,
-                        );
-
+                        scene.push_layer(Fill::NonZero, blend_mode, alpha, transform, &rect);
                         true
                     }
-                    _ => false,
                 };
 
                 render_group(scene, g, Affine::IDENTITY, error_handler);
