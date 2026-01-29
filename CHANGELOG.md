@@ -13,7 +13,11 @@ You can find its changes [documented below](#071-2025-06-21).
 
 ## [Unreleased][]
 
-This release has an [MSRV][] of 1.86.
+This release has an [MSRV][] of 1.88.
+
+### Changed
+
+- Updated vello to 0.7.0
 
 ## [0.8.0][] (2025-10-05)
 
