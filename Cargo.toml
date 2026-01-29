@@ -5,7 +5,7 @@ members = ["examples/with_winit", "examples/run_wasm", "examples/scenes"]
 [workspace.package]
 edition = "2024"
 # When updating, also update the "Version compatibility" table in the README
-version = "0.8.0"
+version = "0.9.0"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/linebender/vello_svg"
 # Keep in sync with RUST_MIN_VER in .github/workflows/ci.yml, with the relevant README.md files

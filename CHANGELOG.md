@@ -15,6 +15,10 @@ You can find its changes [documented below](#071-2025-06-21).
 
 This release has an [MSRV][] of 1.86.
 
+## [0.9.0][] (2026-01-29)
+
+This release has an [MSRV][] of 1.86.
+
 ### Changed
 
 - Updated vello to 0.7.0
@@ -167,7 +171,8 @@ This release has an [MSRV][] of 1.75.
 [#6]: https://github.com/linebender/vello_svg/pull/6
 [#1]: https://github.com/linebender/vello_svg/pull/1
 
-[Unreleased]: https://github.com/linebender/vello_svg/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/linebender/vello_svg/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/linebender/vello_svg/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/linebender/vello_svg/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/linebender/vello_svg/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/linebender/vello_svg/compare/v0.6.0...v0.7.0
