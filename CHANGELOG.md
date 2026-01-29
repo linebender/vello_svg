@@ -17,7 +17,7 @@ This release has an [MSRV][] of 1.88.
 
 ## [0.9.0][] (2026-01-29)
 
-This release has an [MSRV][] of 1.86.
+This release has an [MSRV][] of 1.88.
 
 ### Changed
 
