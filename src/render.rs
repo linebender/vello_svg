@@ -4,7 +4,7 @@
 use crate::util;
 use vello::Scene;
 use vello::kurbo::Affine;
-use vello::peniko::{BlendMode, Fill, Style};
+use vello::peniko::{BlendMode, Fill};
 
 pub(crate) fn render_group<F: FnMut(&mut Scene, &usvg::Node)>(
     scene: &mut Scene,
