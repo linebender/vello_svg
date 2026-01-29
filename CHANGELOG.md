@@ -8,8 +8,8 @@ Subheadings to categorize changes are `added, changed, deprecated, removed, fixe
 
 -->
 
-The latest published Vello SVG release is [0.7.1](#071-2025-06-21) which was released on 2025-06-21.
-You can find its changes [documented below](#071-2025-06-21).
+The latest published Vello SVG release is [0.9.0](#090-2026-01-29) which was released on 2026-01-29.
+You can find its changes [documented below](#090-2026-01-29).
 
 ## [Unreleased][]
 
