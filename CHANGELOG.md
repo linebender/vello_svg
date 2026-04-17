@@ -13,7 +13,12 @@ You can find its changes [documented below](#090-2026-01-29).
 
 ## [Unreleased][]
 
-This release has an [MSRV][] of 1.88.
+This release has an [MSRV][] of 1.92.
+
+### Changed
+
+- Updated vello to 0.8.0
+- Updated MSRV to 1.92
 
 ## [0.9.0][] (2026-01-29)
 

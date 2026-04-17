@@ -3,16 +3,15 @@ env:
   # version like 1.70. Note that we only specify MAJOR.MINOR and not PATCH so that bugfixes still
   # come automatically. If the version specified here is no longer the latest stable version,
   # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
-  RUST_STABLE_VER: "1.90" # In quotes because otherwise (e.g.) 1.70 would be interpreted as 1.7
+  RUST_STABLE_VER: "1.92" # In quotes because otherwise (e.g.) 1.70 would be interpreted as 1.7
   # The purpose of checking with the minimum supported Rust toolchain is to detect its staleness.
   # If the compilation fails, then the version specified here needs to be bumped up to reality.
   # Be sure to also update the rust-version property in the workspace Cargo.toml file,
   # plus all the README.md files of the affected packages.
-  RUST_MIN_VER: "1.88"
+  RUST_MIN_VER: "1.92"
   # List of packages that will be checked with the minimum supported Rust version.
   # This should be limited to packages that are intended for publishing.
   RUST_MIN_VER_PKGS: "-p vello_svg"
-
 
 # Rationale
 #
@@ -160,13 +159,13 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
         include:
           - os: ubuntu-latest
-            gpu: 'yes'
+            gpu: "yes"
           - os: macos-latest
-            gpu: 'yes'
+            gpu: "yes"
           - os: windows-latest
             # TODO: The windows runners theoretically have CPU fallback for GPUs, but
             # this failed in initial testing
-            gpu: 'no'
+            gpu: "no"
     steps:
       - uses: actions/checkout@v4
 
@@ -252,7 +251,7 @@ jobs:
         run: cargo apk check -p with_winit --lib
         env:
           # This is a bit of a hack, but cargo apk doesn't seem to allow customising this
-          RUSTFLAGS: '-D warnings'
+          RUSTFLAGS: "-D warnings"
 
   check-msrv:
     name: cargo check (msrv)
@@ -330,7 +329,7 @@ jobs:
       - name: cargo doc
         run: cargo doc --workspace --locked --all-features --no-deps --document-private-items
         env:
-          RUSTDOCFLAGS: '--cfg docsrs -D warnings'
+          RUSTDOCFLAGS: "--cfg docsrs -D warnings"
 
   # If this fails, consider changing your text or adding something to .typos.toml.
   typos:
