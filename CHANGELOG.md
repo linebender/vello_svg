@@ -15,6 +15,10 @@ You can find its changes [documented below](#090-2026-01-29).
 
 This release has an [MSRV][] of 1.88.
 
+### Added
+
+- `util::path_elements`, an iterator over the `kurbo::PathEl`s of a `usvg::Path`. Combined with `BezPath::truncate(0)` and `BezPath::extend`, callers can reuse a single `BezPath` buffer across every path in the tree (and across frames) instead of allocating a fresh one per path. `util::to_bez_path` is retained and is now a thin wrapper.
+
 ## [0.9.0][] (2026-01-29)
 
 This release has an [MSRV][] of 1.88.

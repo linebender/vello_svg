@@ -120,8 +120,82 @@ pub fn append_tree_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
 
 #[cfg(test)]
 mod tests {
-    // CI will fail unless cargo nextest can execute at least one test per workspace.
-    // Delete this dummy test once we have an actual real test.
+    use crate::util;
+    use vello::kurbo::BezPath;
+
+    fn visit_paths(group: &usvg::Group, f: &mut impl FnMut(&usvg::Path)) {
+        for node in group.children() {
+            match node {
+                usvg::Node::Group(g) => visit_paths(g, f),
+                usvg::Node::Path(p) => f(p),
+                usvg::Node::Image(img) => {
+                    if let usvg::ImageKind::SVG(svg) = img.kind() {
+                        visit_paths(svg.root(), f);
+                    }
+                }
+                usvg::Node::Text(t) => visit_paths(t.flattened(), f),
+            }
+        }
+    }
+
+    /// `path_elements` must produce the exact same `PathEl` sequence as the
+    /// historical `to_bez_path` — verified against a non-trivial real-world
+    /// SVG (the Ghostscript Tiger, the canonical 2D-rendering stress test
+    /// used across the graphics ecosystem).
     #[test]
-    fn dummy_test_until_we_have_a_real_test() {}
+    fn path_elements_matches_to_bez_path_on_tiger() {
+        let svg = include_str!("../examples/assets/Ghostscript_Tiger.svg");
+        let tree = usvg::Tree::from_str(svg, &usvg::Options::default()).unwrap();
+
+        let mut buf = BezPath::new();
+        let mut path_count = 0_usize;
+        visit_paths(tree.root(), &mut |path| {
+            buf.truncate(0);
+            buf.extend(util::path_elements(path));
+            let reference = util::to_bez_path(path);
+            assert_eq!(
+                buf.elements(),
+                reference.elements(),
+                "path_elements diverged from to_bez_path on path #{path_count}",
+            );
+            path_count += 1;
+        });
+        assert!(
+            path_count > 100,
+            "expected the tiger to contain many paths; got {path_count}",
+        );
+    }
+
+    /// A reused `BezPath` buffer, filled via `path_elements` across every
+    /// path in the tiger, must never reallocate once its capacity reaches
+    /// the tree's largest path. Demonstrates the intended per-frame reuse
+    /// pattern.
+    #[test]
+    fn path_elements_reuses_bezpath_capacity() {
+        let svg = include_str!("../examples/assets/Ghostscript_Tiger.svg");
+        let tree = usvg::Tree::from_str(svg, &usvg::Options::default()).unwrap();
+
+        // First pass: size the buffer to the tree's largest path.
+        let mut max_len = 0_usize;
+        visit_paths(tree.root(), &mut |p| {
+            max_len = max_len.max(util::path_elements(p).count());
+        });
+        let mut buf = BezPath::with_capacity(max_len);
+        // `Vec::with_capacity` may over-allocate; remember what we actually got.
+        let initial_cap = buf.elements().len().saturating_add(max_len);
+
+        // Second pass: refill the buffer for each path. Capacity must not grow.
+        visit_paths(tree.root(), &mut |p| {
+            buf.truncate(0);
+            buf.extend(util::path_elements(p));
+            assert!(
+                buf.elements().len() <= initial_cap,
+                "path produced {} elements, exceeding pre-sized capacity {initial_cap}",
+                buf.elements().len(),
+            );
+        });
+        // After the walk, truncate keeps the allocation.
+        buf.truncate(0);
+        assert_eq!(buf.elements().len(), 0);
+    }
 }

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use vello::Scene;
-use vello::kurbo::{Affine, BezPath, Point, Rect, Stroke};
+use vello::kurbo::{Affine, BezPath, PathEl, Point, Rect, Stroke};
 use vello::peniko::color::{DynamicColor, palette};
 use vello::peniko::{Brush, Color, Fill};
 
@@ -44,53 +44,132 @@ pub fn to_stroke(stroke: &usvg::Stroke) -> Stroke {
 }
 
 pub fn to_bez_path(path: &usvg::Path) -> BezPath {
-    let mut local_path = BezPath::new();
-    // The semantics of SVG paths don't line up with `BezPath`; we
-    // must manually track initial points
-    let mut just_closed = false;
-    let mut most_recent_initial = (0., 0.);
-    for elt in path.data().segments() {
-        match elt {
+    BezPath::from_iter(path_elements(path))
+}
+
+/// Iterate the [`kurbo::PathEl`](vello::kurbo::PathEl)s of a [`usvg::Path`].
+///
+/// The semantics of SVG paths don't line up with `BezPath` (an SVG subpath that
+/// `Z`-closes and then begins a new segment without an intervening `M` must
+/// emit an extra `MoveTo` on the `BezPath` side), so this does more than a
+/// straight segment-to-element map.
+///
+/// Using this with [`kurbo::BezPath`](vello::kurbo::BezPath)'s [`Extend`] impl
+/// lets callers retain a single `BezPath` buffer across frames:
+///
+/// ```no_run
+/// use vello_svg::vello::kurbo::BezPath;
+/// # let svg = "";
+/// # let tree = vello_svg::usvg::Tree::from_str(svg, &Default::default()).unwrap();
+/// # fn some_path(t: &vello_svg::usvg::Tree) -> &vello_svg::usvg::Path { unimplemented!() }
+/// let mut buf = BezPath::new();
+/// // Every frame, for each path:
+/// let path = some_path(&tree);
+/// buf.truncate(0); // retains capacity
+/// buf.extend(vello_svg::util::path_elements(path));
+/// // ... hand `buf` to the scene, then reuse it for the next path ...
+/// ```
+///
+/// This matches the [`vello::Scene::reset`](vello::Scene::reset) pattern:
+/// callers are expected to clear the destination buffer themselves between
+/// uses.
+pub fn path_elements(path: &usvg::Path) -> PathElements<'_> {
+    PathElements {
+        inner: path.data().segments(),
+        just_closed: false,
+        most_recent_initial: Point::ZERO,
+        pending: None,
+    }
+}
+
+/// Iterator returned by [`path_elements`].
+#[derive(Clone)]
+pub struct PathElements<'a> {
+    inner: usvg::tiny_skia_path::PathSegmentsIter<'a>,
+    just_closed: bool,
+    most_recent_initial: Point,
+    pending: Option<PathEl>,
+}
+
+// `PathSegmentsIter` does not implement `Debug` upstream.
+impl core::fmt::Debug for PathElements<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("PathElements")
+            .field("just_closed", &self.just_closed)
+            .field("most_recent_initial", &self.most_recent_initial)
+            .field("pending", &self.pending)
+            .finish_non_exhaustive()
+    }
+}
+
+impl Iterator for PathElements<'_> {
+    type Item = PathEl;
+
+    fn next(&mut self) -> Option<PathEl> {
+        if let Some(pending) = self.pending.take() {
+            return Some(pending);
+        }
+        let seg = self.inner.next()?;
+        let just_closed = std::mem::take(&mut self.just_closed);
+        Some(match seg {
             usvg::tiny_skia_path::PathSegment::MoveTo(p) => {
-                if std::mem::take(&mut just_closed) {
-                    local_path.move_to(most_recent_initial);
+                let new_initial = Point::new(p.x as f64, p.y as f64);
+                if just_closed {
+                    let prior_initial = self.most_recent_initial;
+                    self.most_recent_initial = new_initial;
+                    self.pending = Some(PathEl::MoveTo(new_initial));
+                    PathEl::MoveTo(prior_initial)
+                } else {
+                    self.most_recent_initial = new_initial;
+                    PathEl::MoveTo(new_initial)
                 }
-                most_recent_initial = (p.x.into(), p.y.into());
-                local_path.move_to(most_recent_initial);
             }
             usvg::tiny_skia_path::PathSegment::LineTo(p) => {
-                if std::mem::take(&mut just_closed) {
-                    local_path.move_to(most_recent_initial);
+                let pt = Point::new(p.x as f64, p.y as f64);
+                if just_closed {
+                    self.pending = Some(PathEl::LineTo(pt));
+                    PathEl::MoveTo(self.most_recent_initial)
+                } else {
+                    PathEl::LineTo(pt)
                 }
-                local_path.line_to(Point::new(p.x as f64, p.y as f64));
             }
             usvg::tiny_skia_path::PathSegment::QuadTo(p1, p2) => {
-                if std::mem::take(&mut just_closed) {
-                    local_path.move_to(most_recent_initial);
+                let a = Point::new(p1.x as f64, p1.y as f64);
+                let b = Point::new(p2.x as f64, p2.y as f64);
+                if just_closed {
+                    self.pending = Some(PathEl::QuadTo(a, b));
+                    PathEl::MoveTo(self.most_recent_initial)
+                } else {
+                    PathEl::QuadTo(a, b)
                 }
-                local_path.quad_to(
-                    Point::new(p1.x as f64, p1.y as f64),
-                    Point::new(p2.x as f64, p2.y as f64),
-                );
             }
             usvg::tiny_skia_path::PathSegment::CubicTo(p1, p2, p3) => {
-                if std::mem::take(&mut just_closed) {
-                    local_path.move_to(most_recent_initial);
+                let a = Point::new(p1.x as f64, p1.y as f64);
+                let b = Point::new(p2.x as f64, p2.y as f64);
+                let c = Point::new(p3.x as f64, p3.y as f64);
+                if just_closed {
+                    self.pending = Some(PathEl::CurveTo(a, b, c));
+                    PathEl::MoveTo(self.most_recent_initial)
+                } else {
+                    PathEl::CurveTo(a, b, c)
                 }
-                local_path.curve_to(
-                    Point::new(p1.x as f64, p1.y as f64),
-                    Point::new(p2.x as f64, p2.y as f64),
-                    Point::new(p3.x as f64, p3.y as f64),
-                );
             }
             usvg::tiny_skia_path::PathSegment::Close => {
-                just_closed = true;
-                local_path.close_path();
+                self.just_closed = true;
+                PathEl::ClosePath
             }
-        }
+        })
     }
 
-    local_path
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let (lo, hi) = self.inner.size_hint();
+        // Each inner segment expands to 1 or 2 `PathEl`s, plus any pending item.
+        let pending = usize::from(self.pending.is_some());
+        (
+            lo.saturating_add(pending),
+            hi.and_then(|h| h.checked_mul(2)?.checked_add(pending)),
+        )
+    }
 }
 
 #[cfg(feature = "image")]
