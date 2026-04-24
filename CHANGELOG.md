@@ -15,6 +15,10 @@ You can find its changes [documented below](#090-2026-01-29).
 
 This release has an [MSRV][] of 1.88.
 
+### Fixed
+
+- `with_winit` web demo panicked on startup in all browsers because the `wgpu` crate was compiled without any enabled backend features. Switched the example to enable vello's `wgpu_default` feature so the `webgpu` (and other) backends are included.
+
 ## [0.9.0][] (2026-01-29)
 
 This release has an [MSRV][] of 1.88.
