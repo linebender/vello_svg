@@ -167,70 +167,70 @@ fn run(
                 match event {
                     WindowEvent::CloseRequested => event_loop.exit(),
                     WindowEvent::ModifiersChanged(m) => modifiers = m.state(),
-                    WindowEvent::KeyboardInput { event, .. } => {
-                        if event.state == ElementState::Pressed {
-                            match event.logical_key.as_ref() {
-                                Key::Named(NamedKey::ArrowLeft) => {
-                                    scene_ix = scene_ix.saturating_sub(1);
-                                }
-                                Key::Named(NamedKey::ArrowRight) => {
-                                    scene_ix = scene_ix.saturating_add(1);
-                                }
-                                Key::Named(NamedKey::ArrowUp) => complexity += 1,
-                                Key::Named(NamedKey::ArrowDown) => {
-                                    complexity = complexity.saturating_sub(1);
-                                }
-                                Key::Named(NamedKey::Space) => {
-                                    transform = Affine::IDENTITY;
-                                }
-                                Key::Character(char) => {
-                                    // TODO: Have a more principled way of handling modifiers on keypress
-                                    // see e.g. https://xi.zulipchat.com/#narrow/stream/351333-glazier/topic/Keyboard.20shortcuts
-                                    let char = char.to_lowercase();
-                                    match char.as_str() {
-                                        "q" | "e" => {
-                                            if let Some(prior_position) = prior_position {
-                                                let is_clockwise = char == "e";
-                                                let angle = if is_clockwise { -0.05 } else { 0.05 };
-                                                transform = Affine::translate(prior_position)
-                                                    * Affine::rotate(angle)
-                                                    * Affine::translate(-prior_position)
-                                                    * transform;
-                                            }
-                                        }
-                                        "s" => {
-                                            stats_shown = !stats_shown;
-                                        }
-                                        "d" => {
-                                            complexity_shown = !complexity_shown;
-                                        }
-                                        "c" => {
-                                            stats.clear_min_and_max();
-                                        }
-                                        "m" => {
-                                            aa_config_ix = if modifiers.shift_key() {
-                                                aa_config_ix.saturating_sub(1)
-                                            } else {
-                                                aa_config_ix.saturating_add(1)
-                                            };
-                                        }
-                                        "v" => {
-                                            vsync_on = !vsync_on;
-                                            render_cx.set_present_mode(
-                                                &mut render_state.surface,
-                                                if vsync_on {
-                                                    wgpu::PresentMode::AutoVsync
-                                                } else {
-                                                    wgpu::PresentMode::AutoNoVsync
-                                                },
-                                            );
-                                        }
-                                        _ => {}
-                                    }
-                                }
-                                Key::Named(NamedKey::Escape) => event_loop.exit(),
-                                _ => {}
+                    WindowEvent::KeyboardInput { event, .. }
+                        if event.state == ElementState::Pressed =>
+                    {
+                        match event.logical_key.as_ref() {
+                            Key::Named(NamedKey::ArrowLeft) => {
+                                scene_ix = scene_ix.saturating_sub(1);
                             }
+                            Key::Named(NamedKey::ArrowRight) => {
+                                scene_ix = scene_ix.saturating_add(1);
+                            }
+                            Key::Named(NamedKey::ArrowUp) => complexity += 1,
+                            Key::Named(NamedKey::ArrowDown) => {
+                                complexity = complexity.saturating_sub(1);
+                            }
+                            Key::Named(NamedKey::Space) => {
+                                transform = Affine::IDENTITY;
+                            }
+                            Key::Character(char) => {
+                                // TODO: Have a more principled way of handling modifiers on keypress
+                                // see e.g. https://xi.zulipchat.com/#narrow/stream/351333-glazier/topic/Keyboard.20shortcuts
+                                let char = char.to_lowercase();
+                                match char.as_str() {
+                                    "q" | "e" => {
+                                        if let Some(prior_position) = prior_position {
+                                            let is_clockwise = char == "e";
+                                            let angle = if is_clockwise { -0.05 } else { 0.05 };
+                                            transform = Affine::translate(prior_position)
+                                                * Affine::rotate(angle)
+                                                * Affine::translate(-prior_position)
+                                                * transform;
+                                        }
+                                    }
+                                    "s" => {
+                                        stats_shown = !stats_shown;
+                                    }
+                                    "d" => {
+                                        complexity_shown = !complexity_shown;
+                                    }
+                                    "c" => {
+                                        stats.clear_min_and_max();
+                                    }
+                                    "m" => {
+                                        aa_config_ix = if modifiers.shift_key() {
+                                            aa_config_ix.saturating_sub(1)
+                                        } else {
+                                            aa_config_ix.saturating_add(1)
+                                        };
+                                    }
+                                    "v" => {
+                                        vsync_on = !vsync_on;
+                                        render_cx.set_present_mode(
+                                            &mut render_state.surface,
+                                            if vsync_on {
+                                                wgpu::PresentMode::AutoVsync
+                                            } else {
+                                                wgpu::PresentMode::AutoNoVsync
+                                            },
+                                        );
+                                    }
+                                    _ => {}
+                                }
+                            }
+                            Key::Named(NamedKey::Escape) => event_loop.exit(),
+                            _ => {}
                         }
                     }
                     WindowEvent::Touch(touch) => {
@@ -280,10 +280,10 @@ fn run(
                         );
                         render_state.window.request_redraw();
                     }
-                    WindowEvent::MouseInput { state, button, .. } => {
-                        if button == &MouseButton::Left {
-                            mouse_down = state == &ElementState::Pressed;
-                        }
+                    WindowEvent::MouseInput { state, button, .. }
+                        if button == &MouseButton::Left =>
+                    {
+                        mouse_down = state == &ElementState::Pressed;
                     }
                     WindowEvent::MouseWheel { delta, .. } => {
                         const BASE: f64 = 1.05;
@@ -397,10 +397,15 @@ fn run(
                             )
                             .expect("failed to render to texture");
 
-                        let surface_texture = surface
-                            .surface
-                            .get_current_texture()
-                            .expect("failed to get current texture");
+                        let surface_texture = surface.surface.get_current_texture();
+                        let surface_texture = match surface_texture {
+                            wgpu::CurrentSurfaceTexture::Success(surface_texture)
+                            | wgpu::CurrentSurfaceTexture::Suboptimal(surface_texture) => {
+                                surface_texture
+                            }
+                            _ => return,
+                        };
+                        // .expect("failed to get current texture");
 
                         // Perform the copy.
                         let mut encoder = device_handle.device.create_command_encoder(
