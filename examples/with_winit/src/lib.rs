@@ -397,15 +397,31 @@ fn run(
                             )
                             .expect("failed to render to texture");
 
-                        let surface_texture = surface.surface.get_current_texture();
-                        let surface_texture = match surface_texture {
+                        let surface = &mut render_state.surface;
+                        let surface_texture = match surface.surface.get_current_texture() {
                             wgpu::CurrentSurfaceTexture::Success(surface_texture)
                             | wgpu::CurrentSurfaceTexture::Suboptimal(surface_texture) => {
                                 surface_texture
                             }
+                            wgpu::CurrentSurfaceTexture::Outdated
+                            | wgpu::CurrentSurfaceTexture::Lost => {
+                                render_cx.resize_surface(
+                                    surface,
+                                    surface.config.width,
+                                    surface.config.height,
+                                );
+                                match surface.surface.get_current_texture() {
+                                    wgpu::CurrentSurfaceTexture::Success(surface_texture)
+                                    | wgpu::CurrentSurfaceTexture::Suboptimal(surface_texture) => {
+                                        surface_texture
+                                    }
+                                    // Reconfiguring didn't help; skip this frame.
+                                    _ => return,
+                                }
+                            }
+                            // Timeout / occluded / validation error: skip this frame.
                             _ => return,
                         };
-                        // .expect("failed to get current texture");
 
                         // Perform the copy.
                         let mut encoder = device_handle.device.create_command_encoder(
