@@ -15,6 +15,10 @@ You can find its changes [documented below](#090-2026-01-29).
 
 This release has an [MSRV][] of 1.88.
 
+### Changed
+
+- Vello has been upgraded to v0.9, and `wgpu` (in the `with_winit` example) to v29. ([#85][] by [@nixonyh][])
+
 ## [0.9.0][] (2026-01-29)
 
 This release has an [MSRV][] of 1.88.
@@ -37,8 +41,8 @@ This release has an [MSRV][] of 1.85.
 
 ### Changed
 
-- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61][] by [@nixon-voxell][])
-- Support group opacity. ([#61][] by [@nixon-voxell][])
+- Support group `usvg::BlendMode` with `vello::peniko::Mix`. ([#61][] by [@nixonyh][])
+- Support group opacity. ([#61][] by [@nixonyh][])
 
 ### Fixed
 
@@ -122,7 +126,7 @@ This release has an [MSRV][] of 1.75.
 
 ### Added
 
-- Make `util` module public and some minor doc fixes. ([#12] by [@nixon-voxell])
+- Make `util` module public and some minor doc fixes. ([#12] by [@nixonyh])
 
 ### Changed
 
@@ -149,11 +153,12 @@ This release has an [MSRV][] of 1.75.
 [@nicoburns]: https://github.com/nicoburns
 [@waywardmonkeys]: https://github.com/waywardmonkeys
 [@simbleau]: https://github.com/simbleau
-[@nixon-voxell]: https://github.com/nixon-voxell
+[@nixonyh]: https://github.com/nixonyh
 [@MarijnS95]: https://github.com/MarijnS95
 [@DasLixou]: https://github.com/DasLixou
 [@RobertBrewitz]: https://github.com/RobertBrewitz
 
+[#85]: https://github.com/linebender/vello_svg/pull/85
 [#63]: https://github.com/linebender/vello_svg/pull/63
 [#61]: https://github.com/linebender/vello_svg/pull/61
 [#53]: https://github.com/linebender/vello_svg/pull/53
