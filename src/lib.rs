@@ -1,14 +1,28 @@
 // Copyright 2023 the Vello Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! Render an SVG document to a Vello [`Scene`](vello::Scene).
+//! Render an SVG document to any backend implementing [`RenderSink`].
+//!
+//! Vello support is enabled by default. Raster images require a custom
+//! [`RenderSink::draw_image`] implementation.
 //!
 //! This currently lacks support for a [number of important](crate#unsupported-features) SVG features.
 //!
 //! This is also intended to be the preferred integration between Vello and [usvg], so [consider
 //! contributing](https://github.com/linebender/vello_svg) if you need a feature which is missing.
 //!
-//! This crate also re-exports [`usvg`] and [`vello`], so you can easily use the specific versions that are compatible with Vello SVG.
+//! ## Usage
+//!
+//! ```
+//! # #[cfg(feature = "vello")] {
+//! let svg = r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+//!     <circle cx="50" cy="50" r="40" fill="red"/>
+//! </svg>"#;
+//! let scene = vello_svg::render(svg).expect("valid SVG");
+//! # }
+//! ```
+//!
+//! Use [`append`] or [`append_tree`] to render into an existing scene or custom sink.
 //!
 //! # Unsupported features
 //!
@@ -43,6 +57,9 @@
 #![cfg_attr(test, allow(unused_crate_dependencies, reason = "Deferred"))] // Some dev dependencies are only used in tests
 
 mod render;
+pub use render::RenderSink;
+#[cfg(feature = "vello")]
+pub use render::{render, render_tree};
 
 mod error;
 pub use error::Error;
@@ -50,38 +67,32 @@ pub use error::Error;
 pub mod util;
 
 /// Re-export vello.
+#[cfg(feature = "vello")]
 pub use vello;
+
+pub use kurbo;
+pub use peniko;
 
 /// Re-export usvg.
 pub use usvg;
-use vello::kurbo::Affine;
 
-/// Render a [`Scene`](vello::Scene) from an SVG string, with default error handling.
+use kurbo::Affine;
+
+/// Append an SVG to a [`RenderSink`], with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
-pub fn render(svg: &str) -> Result<vello::Scene, Error> {
-    let opt = usvg::Options::default();
-    let tree = usvg::Tree::from_str(svg, &opt)?;
-    let mut scene = vello::Scene::new();
-    append_tree(&mut scene, &tree);
-    Ok(scene)
-}
-
-/// Append an SVG to a vello [`Scene`](vello::Scene), with default error handling.
-///
-/// This will draw a red box over (some) unsupported elements.
-pub fn append(scene: &mut vello::Scene, svg: &str) -> Result<(), Error> {
+pub fn append(scene: &mut impl RenderSink, svg: &str) -> Result<(), Error> {
     let opt = usvg::Options::default();
     let tree = usvg::Tree::from_str(svg, &opt)?;
     append_tree(scene, &tree);
     Ok(())
 }
 
-/// Append an SVG to a vello [`Scene`](vello::Scene), with user-provided error handling logic.
+/// Append an SVG to a [`RenderSink`], with user-provided error handling logic.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
-pub fn append_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
-    scene: &mut vello::Scene,
+pub fn append_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
+    scene: &mut S,
     svg: &str,
     error_handler: &mut F,
 ) -> Result<(), Error> {
@@ -91,37 +102,20 @@ pub fn append_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
     Ok(())
 }
 
-/// Render a [`Scene`](vello::Scene) from a [`usvg::Tree`], with default error handling.
+/// Append an [`usvg::Tree`] to a [`RenderSink`], with default error handling.
 ///
 /// This will draw a red box over (some) unsupported elements.
-pub fn render_tree(svg: &usvg::Tree) -> vello::Scene {
-    let mut scene = vello::Scene::new();
-    append_tree(&mut scene, svg);
-    scene
-}
-
-/// Append an [`usvg::Tree`] to a vello [`Scene`](vello::Scene), with default error handling.
-///
-/// This will draw a red box over (some) unsupported elements.
-pub fn append_tree(scene: &mut vello::Scene, svg: &usvg::Tree) {
+pub fn append_tree(scene: &mut impl RenderSink, svg: &usvg::Tree) {
     append_tree_with(scene, svg, &mut util::default_error_handler);
 }
 
-/// Append an [`usvg::Tree`] to a vello [`Scene`](vello::Scene), with user-provided error handling logic.
+/// Append an [`usvg::Tree`] to a [`RenderSink`], with user-provided error handling logic.
 ///
 /// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
-pub fn append_tree_with<F: FnMut(&mut vello::Scene, &usvg::Node)>(
-    scene: &mut vello::Scene,
+pub fn append_tree_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
+    scene: &mut S,
     svg: &usvg::Tree,
     error_handler: &mut F,
 ) {
     render::render_group(scene, svg.root(), Affine::IDENTITY, error_handler);
-}
-
-#[cfg(test)]
-mod tests {
-    // CI will fail unless cargo nextest can execute at least one test per workspace.
-    // Delete this dummy test once we have an actual real test.
-    #[test]
-    fn dummy_test_until_we_have_a_real_test() {}
 }

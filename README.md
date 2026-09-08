@@ -2,7 +2,9 @@
 
 # Vello SVG
 
-**An integration to parse and render SVG with [Vello](https://vello.dev).**
+**A library to parse and render SVG documents.**
+
+Render with the (optional) built-in [Vello](https://vello.dev) integration, or implement the [`RenderSink`](https://docs.rs/vello_svg/latest/vello_svg/trait.RenderSink.html) trait to bring your own renderer.
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23vello-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/channel/197075-vello)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
@@ -31,6 +33,36 @@
 | 0.3       | 0.2   | 0.42 | 0.25  |
 | 0.2       | 0.1   | 0.41 | 0.25  |
 | 0.1       | 0.1   | 0.40 | 0.24  |
+
+## Usage
+
+The APIs and features below describe the unreleased development version.
+
+Render an SVG to a `vello::Scene` with the default `vello` feature:
+
+```rust
+let svg = r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+    <circle cx="50" cy="50" r="40" fill="red"/>
+</svg>"#;
+let scene = vello_svg::render(svg).expect("valid SVG");
+```
+
+Use `render_tree` for a parsed `usvg::Tree`, or `append` and `append_tree` to draw
+into an existing scene. Enable `wgpu` for Vello's GPU renderer.
+
+For a custom backend, disable default features and implement `RenderSink` using
+the re-exported `kurbo` and `peniko` types. All `append*` functions accept a sink.
+
+For a local checkout of this development version:
+
+```toml
+vello_svg = { path = "path/to/vello_svg", default-features = false }
+```
+
+Raster images are passed to `RenderSink::draw_image` as `usvg::Image`, with
+encoded data and image metadata. Consumers handle decoding, caching, and decode
+errors. The built-in Vello sink skips raster images; embedded SVG images are
+rendered as vectors.
 
 ## Examples
 

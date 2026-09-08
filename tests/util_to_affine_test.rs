@@ -5,7 +5,7 @@
 #[cfg(test)]
 pub mod util_to_affine_test {
     use usvg::Transform;
-    use vello::kurbo::Affine;
+    use vello_svg::kurbo::Affine;
     use vello_svg::util::to_affine;
 
     #[test]
