@@ -100,7 +100,7 @@ There is also a web demo [available here](https://linebender.github.io/vello_svg
 
 ## Minimum supported Rust Version (MSRV)
 
-This version of Vello SVG has been verified to compile with **Rust 1.85** and later.
+This version of Vello SVG has been verified to compile with **Rust 1.88** and later.
 
 Future versions of Vello SVG might increase the Rust version requirement.
 It will not be treated as a breaking change and as such can even happen with small patch releases.
@@ -108,7 +108,7 @@ It will not be treated as a breaking change and as such can even happen with sma
 <details>
 <summary>Click here if compiling fails.</summary>
 
-As time has passed, some of Velato's dependencies could have released versions with a higher Rust requirement.
+As time has passed, some of Vello SVG's dependencies could have released versions with a higher Rust requirement.
 If you encounter a compilation issue due to a dependency and don't want to upgrade your Rust toolchain, then you could downgrade the dependency.
 
 ```sh
@@ -120,7 +120,7 @@ cargo update -p package_name --precise 0.1.1
 
 ## Community
 
-Discussion of Velato development happens in the [Linebender Zulip](https://xi.zulipchat.com/), specifically the [#vello channel](https://xi.zulipchat.com/#narrow/channel/197075-vello). All public content can be read without logging in.
+Discussion of Vello SVG development happens in the [Linebender Zulip](https://xi.zulipchat.com/), specifically the [#vello channel](https://xi.zulipchat.com/#narrow/channel/197075-vello). All public content can be read without logging in.
 
 Contributions are welcome by pull request. The [Rust code of conduct](https://www.rust-lang.org/policies/code-of-conduct) applies.
 

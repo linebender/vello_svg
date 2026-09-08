@@ -26,11 +26,8 @@
 //!
 //! # Unsupported features
 //!
-//! Missing features include:
-//! - text
-//! - group opacity
-//! - mix-blend-modes
-//! - clipping
+//! Unsupported or incomplete features include:
+//! - clipping beyond a single path
 //! - masking
 //! - filter effects
 //! - group background
@@ -66,7 +63,7 @@ pub use error::Error;
 
 pub mod util;
 
-/// Re-export vello.
+/// Re-export `vello`.
 #[cfg(feature = "vello")]
 pub use vello;
 
@@ -90,7 +87,7 @@ pub fn append(scene: &mut impl RenderSink, svg: &str) -> Result<(), Error> {
 
 /// Append an SVG to a [`RenderSink`], with user-provided error handling logic.
 ///
-/// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
+/// See the [unsupported features](crate#unsupported-features).
 pub fn append_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
     scene: &mut S,
     svg: &str,
@@ -125,7 +122,7 @@ pub fn append_tree_with_transform(
 
 /// Append an [`usvg::Tree`] to a [`RenderSink`], with user-provided error handling logic.
 ///
-/// See the [module level documentation](crate#unsupported-features) for a list of some unsupported svg features
+/// See the [unsupported features](crate#unsupported-features).
 pub fn append_tree_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
     scene: &mut S,
     svg: &usvg::Tree,
