@@ -23,6 +23,7 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 | vello_svg | vello | usvg | image |
 | --------- | ----- | ---- | ----- |
+| Unreleased | 0.10 | 0.48 | —     |
 | 0.10      | 0.9   | 0.46 | 0.25  |
 | 0.9       | 0.7   | 0.46 | 0.25  |
 | 0.8       | 0.6   | 0.45 | 0.25  |
