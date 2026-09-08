@@ -106,7 +106,21 @@ pub fn append_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
 ///
 /// This will draw a red box over (some) unsupported elements.
 pub fn append_tree(scene: &mut impl RenderSink, svg: &usvg::Tree) {
-    append_tree_with(scene, svg, &mut util::default_error_handler);
+    append_tree_with_transform(scene, svg, Affine::IDENTITY);
+}
+
+/// Append an [`usvg::Tree`] to a [`RenderSink`] with a base transform applied to all elements.
+pub fn append_tree_with_transform(
+    scene: &mut impl RenderSink,
+    svg: &usvg::Tree,
+    transform: Affine,
+) {
+    render::render_group(
+        scene,
+        svg.root(),
+        transform,
+        &mut util::default_error_handler_with_transform,
+    );
 }
 
 /// Append an [`usvg::Tree`] to a [`RenderSink`], with user-provided error handling logic.
@@ -117,5 +131,12 @@ pub fn append_tree_with<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
     svg: &usvg::Tree,
     error_handler: &mut F,
 ) {
-    render::render_group(scene, svg.root(), Affine::IDENTITY, error_handler);
+    render::render_group(
+        scene,
+        svg.root(),
+        Affine::IDENTITY,
+        &mut |scene, node, _| {
+            error_handler(scene, node);
+        },
+    );
 }

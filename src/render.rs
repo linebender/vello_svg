@@ -52,15 +52,15 @@ pub trait RenderSink {
     fn end_group(&mut self) {}
 }
 
-pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
+pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node, Affine)>(
     scene: &mut S,
     group: &usvg::Group,
-    transform: Affine,
+    base_transform: Affine,
     error_handler: &mut F,
 ) {
     scene.begin_group(group);
     for node in group.children() {
-        let transform = transform * util::to_affine(&node.abs_transform());
+        let transform = base_transform * util::to_affine(&node.abs_transform());
         match node {
             usvg::Node::Group(g) => {
                 let alpha = g.opacity().get();
@@ -103,7 +103,8 @@ pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
                     }
                 };
 
-                render_group(scene, g, Affine::IDENTITY, error_handler);
+                // usvg's absolute transforms already include the ancestor groups.
+                render_group(scene, g, base_transform, error_handler);
 
                 scene.pop_layer();
             }
@@ -129,7 +130,7 @@ pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
                                 &local_path,
                             );
                         } else {
-                            error_handler(scene, node);
+                            error_handler(scene, node, transform);
                         }
                     }
                 };
@@ -147,7 +148,7 @@ pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node)>(
                                 &local_path,
                             );
                         } else {
-                            error_handler(scene, node);
+                            error_handler(scene, node, transform);
                         }
                     }
                 };

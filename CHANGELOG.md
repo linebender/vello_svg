@@ -24,6 +24,10 @@ This release has an [MSRV][] of 1.88.
 - **Breaking:** Removed the `image` and `image_format_*` features and the public helpers `into_image` and `decode_raw_raster_image`, implement `RenderSink::draw_image` to handle decoding and rendering.
 - Made Vello optional behind the default `vello` feature ([#100][] by [@RobertBrewitz])
 
+### Fixed
+
+- Fixed transforms for nested groups in embedded SVGs and flattened text, and for unsupported-element placeholders. ([#100][] by [@RobertBrewitz])
+
 ## [0.10.0][] (2026-07-19)
 
 This release has an [MSRV][] of 1.88.

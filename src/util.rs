@@ -171,6 +171,14 @@ pub fn to_brush(paint: &usvg::Paint, opacity: usvg::Opacity) -> Option<(Brush, A
 /// Error handler function for [`super::append_tree_with`] which draws a transparent red box
 /// instead of unsupported SVG features
 pub fn default_error_handler(scene: &mut impl RenderSink, node: &usvg::Node) {
+    default_error_handler_with_transform(scene, node, to_affine(&node.abs_transform()));
+}
+
+pub(crate) fn default_error_handler_with_transform(
+    scene: &mut impl RenderSink,
+    node: &usvg::Node,
+    transform: Affine,
+) {
     let bb = node.bounding_box();
     let rect = Rect {
         x0: bb.left() as f64,
@@ -180,7 +188,7 @@ pub fn default_error_handler(scene: &mut impl RenderSink, node: &usvg::Node) {
     };
     scene.fill(
         Fill::NonZero,
-        Affine::IDENTITY,
+        transform,
         &Brush::Solid(palette::css::RED.with_alpha(0.5)),
         Affine::IDENTITY,
         &rect,
