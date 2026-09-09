@@ -3152,7 +3152,7 @@ dependencies = [
 
 [[package]]
 name = "vello_svg"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "kurbo",
  "peniko",
