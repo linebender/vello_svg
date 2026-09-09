@@ -4,7 +4,7 @@
 
 **A library to parse and render SVG documents.**
 
-Render with the (optional) built-in [Vello](https://vello.dev) integration, or implement the [`RenderSink`](https://docs.rs/vello_svg/latest/vello_svg/trait.RenderSink.html) trait to bring your own renderer.
+Render with the (optional) built-in [Vello](https://vello.dev) integration, or implement the [`RenderSink`](src/render.rs) trait to bring your own renderer.
 
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23vello-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/channel/197075-vello)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
@@ -37,9 +37,11 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 ## Usage
 
+These examples target a local checkout of the development version.
+
 ### Custom backend
 
-Disable the built-in Vello integration:
+If your backend doesn't use Vello, disable default features:
 
 ```toml
 vello_svg = { path = "path/to/vello_svg", default-features = false }
