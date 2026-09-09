@@ -97,7 +97,9 @@ pub fn svg_function_of<R: AsRef<str>>(
             .unwrap_or_else(|e| panic!("failed to parse svg file {name}: {e}"));
         eprintln!("Parsed svg {name} in {:?}", start.elapsed());
         let start = Instant::now();
-        let scene = vello_svg::render_tree(&svg);
+        let mut sink = crate::image_sink::ImageSink::default();
+        vello_svg::append_tree(&mut sink, &svg);
+        let scene = sink.scene;
         let resolution = Vec2::new(svg.size().width() as f64, svg.size().height() as f64);
         eprintln!("Encoded svg {name} in {:?}", start.elapsed());
         (scene, resolution)

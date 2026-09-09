@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200">
+  <rect width="320" height="200" fill="#eee"/>
+  <rect x="24" y="24" width="128" height="128" rx="8" fill="white" stroke="#333"/>
+  <image x="32" y="32" width="112" height="112"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAATElEQVR4nO3OsQ0AIAwDwYxDzRDMRMnI2QA2SApkufnC5csXueatNnaear99AAAAwA5QH3Q9AAAA/AD1QdcDAADAD1AfdD0AAADsgAePL+55LirGKwAAAABJRU5ErkJggg=="/>
+  <g transform="translate(224 88) rotate(20)" opacity="0.7">
+    <image x="-48" y="-48" width="96" height="96"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAATElEQVR4nO3OsQ0AIAwDwYxDzRDMRMnI2QA2SApkufnC5csXueatNnaear99AAAAwA5QH3Q9AAAA/AD1QdcDAADAD1AfdD0AAADsgAePL+55LirGKwAAAABJRU5ErkJggg=="/>
+  </g>
+</svg>

@@ -23,7 +23,7 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 | vello_svg | vello | usvg | image |
 | --------- | ----- | ---- | ----- |
-| Unreleased | 0.10 | 0.48 | —     |
+| main      | 0.10  | 0.48 | -     |
 | 0.10      | 0.9   | 0.46 | 0.25  |
 | 0.9       | 0.7   | 0.46 | 0.25  |
 | 0.8       | 0.6   | 0.45 | 0.25  |
@@ -37,9 +37,25 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 ## Usage
 
-The APIs and features below describe the unreleased development version.
+### Custom backend
 
-Render an SVG to a `vello::Scene` with the default `vello` feature:
+Disable the built-in Vello integration:
+
+```toml
+vello_svg = { path = "path/to/vello_svg", default-features = false }
+```
+
+Implement `RenderSink` using the re-exported `kurbo` and `peniko` types, then call `append(&mut sink, svg)` or `append_tree(&mut sink, &tree)`.
+
+Raster images require a custom `RenderSink::draw_image` implementation for decoding and rendering. See [ImageSink](examples/scenes/src/image_sink.rs) for a Vello wrapper using the `image` crate. Embedded SVG images render as vectors.
+
+### Built-in Vello backend
+
+The `vello` feature is enabled by default:
+
+```toml
+vello_svg = { path = "path/to/vello_svg" }
+```
 
 ```rust
 let svg = r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
@@ -48,22 +64,11 @@ let svg = r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
 let scene = vello_svg::render(svg).expect("valid SVG");
 ```
 
-Use `render_tree` for a parsed `usvg::Tree`, or `append` and `append_tree` to draw
-into an existing scene. Enable `wgpu` for Vello's GPU renderer.
+- `render_tree(&tree)`: create a scene from a parsed `usvg::Tree`.
+- `append(&mut scene, svg)` / `append_tree(&mut scene, &tree)`: add to an existing scene.
+- Enable `wgpu` for Vello's GPU renderer.
 
-For a custom backend, disable default features and implement `RenderSink` using
-the re-exported `kurbo` and `peniko` types. All `append*` functions accept a sink.
-
-For a local checkout of this development version:
-
-```toml
-vello_svg = { path = "path/to/vello_svg", default-features = false }
-```
-
-Raster images are passed to `RenderSink::draw_image` as `usvg::Image`, with
-encoded data and image metadata. Consumers handle decoding, caching, and decode
-errors. The built-in Vello sink skips raster images; embedded SVG images are
-rendered as vectors.
+The built-in backend skips raster images.
 
 ## Examples
 
@@ -77,6 +82,14 @@ You can also load an entire folder or individual files.
 
 ```shell
 cargo run -p with_winit -- examples/assets
+```
+
+### Custom RenderSink with raster images
+
+[ImageSink](examples/scenes/src/image_sink.rs) wraps Vello with `image` decoding, caching, and decode-error reporting. The viewer uses it for SVG files:
+
+```shell
+cargo run -p with_winit -- examples/assets/raster_image.svg
 ```
 
 ### Web platform
@@ -130,9 +143,9 @@ Contributions are welcome by pull request. The [Rust code of conduct](https://ww
 Licensed under either of
 
 - Apache License, Version 2.0
-   ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+  ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
 - MIT license
-   ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
+  ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option
 

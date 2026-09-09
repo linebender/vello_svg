@@ -26,6 +26,7 @@
 
 #[cfg(not(target_arch = "wasm32"))]
 pub mod download;
+mod image_sink;
 mod simple_text;
 mod svg;
 mod test_scenes;
