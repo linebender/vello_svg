@@ -440,7 +440,7 @@ fn run(
                         );
 
                         device_handle.queue.submit([encoder.finish()]);
-                        surface_texture.present();
+                        device_handle.queue.present(surface_texture);
                         device_handle.device.poll(wgpu::PollType::Poll).unwrap();
 
                         let new_time = Instant::now();

@@ -9,7 +9,7 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 [![Linebender Zulip](https://img.shields.io/badge/Linebender-%23vello-blue?logo=Zulip)](https://xi.zulipchat.com/#narrow/channel/197075-vello)
 [![dependency status](https://deps.rs/repo/github/linebender/vello_svg/status.svg)](https://deps.rs/repo/github/linebender/vello_svg)
 [![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](#license)
-[![vello version](https://img.shields.io/badge/vello-v0.10.0-purple.svg)](https://crates.io/crates/vello)\
+[![vello version](https://img.shields.io/badge/vello-v0.11.0-purple.svg)](https://crates.io/crates/vello)\
 [![Crates.io](https://img.shields.io/crates/v/vello_svg.svg)](https://crates.io/crates/vello_svg)
 [![Docs](https://docs.rs/vello_svg/badge.svg)](https://docs.rs/vello_svg)
 [![Build status](https://github.com/linebender/vello_svg/workflows/CI/badge.svg)](https://github.com/linebender/vello_svg/actions)
@@ -23,7 +23,8 @@ Render with the (optional) built-in [Vello](https://vello.dev) integration, or i
 
 | vello_svg  | vello | usvg | image |
 | ---------- | ----- | ---- | ----- |
-| 0.11, main | 0.10  | 0.48 | -     |
+| main       | 0.11  | 0.48 | -     |
+| 0.11       | 0.10  | 0.48 | -     |
 | 0.10       | 0.9   | 0.46 | 0.25  |
 | 0.9        | 0.7   | 0.46 | 0.25  |
 | 0.8        | 0.6   | 0.45 | 0.25  |
@@ -116,7 +117,7 @@ There is also a web demo [available here](https://linebender.github.io/vello_svg
 
 ## Minimum supported Rust Version (MSRV)
 
-This version of Vello SVG has been verified to compile with **Rust 1.88** and later.
+This version of Vello SVG has been verified to compile with **Rust 1.89** and later.
 
 Future versions of Vello SVG might increase the Rust version requirement.
 It will not be treated as a breaking change and as such can even happen with small patch releases.
