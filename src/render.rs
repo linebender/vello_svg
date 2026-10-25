@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
 use crate::util;
-use kurbo::{Affine, Rect, Shape, Stroke};
+use kurbo::{Affine, BezPath, Rect, Shape, Stroke};
 use peniko::{BlendMode, Brush, Fill, Mix};
 
 #[cfg(feature = "vello")]
@@ -83,30 +83,48 @@ pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node, Affine)>
                     usvg::BlendMode::Luminosity => Mix::Luminosity.into(),
                 };
 
-                match g
-                    .clip_path()
-                    // support clip-path with a single path
-                    .and_then(|path| path.root().children().first())
-                {
-                    Some(usvg::Node::Path(clip_path)) => {
-                        let local_path = util::to_bez_path(clip_path);
-                        scene.push_layer(blend_mode, alpha, transform, &local_path);
+                let pushed_layer = if let Some(clip_path) = g.clip_path() {
+                    // The clip path's shapes, in the group's coordinates. usvg puts a
+                    // shape that has a transform into a group of its own.
+                    let mut clip = BezPath::new();
+                    collect_clip(
+                        clip_path.root(),
+                        util::to_affine(&clip_path.transform()),
+                        &mut clip,
+                    );
+                    if clip.elements().is_empty() {
+                        // An empty clip path hides the whole group.
+                        continue;
                     }
-                    _ => {
-                        // Use bounding box as the clip path.
-                        let bounding_box = g.layer_bounding_box();
-                        let rect = Rect::from_origin_size(
-                            (bounding_box.x(), bounding_box.y()),
-                            (bounding_box.width() as f64, bounding_box.height() as f64),
-                        );
-                        scene.push_layer(blend_mode, alpha, transform, &rect);
+                    if clips_nothing(&clip, g) {
+                        // CAD exports often put a page-sized rectangle clip around every
+                        // element. Each is a layer, and thousands of large layers can
+                        // exhaust the renderer's memory, so leave these out.
+                        if needs_layer(g) {
+                            push_bounding_box_layer(scene, g, blend_mode, alpha, transform);
+                            true
+                        } else {
+                            false
+                        }
+                    } else {
+                        scene.push_layer(blend_mode, alpha, transform, &clip);
+                        true
                     }
+                } else if needs_layer(g) {
+                    push_bounding_box_layer(scene, g, blend_mode, alpha, transform);
+                    true
+                } else {
+                    // A plain group needs no layer. Clipping it to its bounding box would
+                    // cut off the outer half of strokes lying on the edge of that box.
+                    false
                 };
 
                 // usvg's absolute transforms already include the ancestor groups.
                 render_group(scene, g, base_transform, error_handler);
 
-                scene.pop_layer();
+                if pushed_layer {
+                    scene.pop_layer();
+                }
             }
             usvg::Node::Path(path) => {
                 if !path.is_visible() {
@@ -180,9 +198,70 @@ pub(crate) fn render_group<S: RenderSink, F: FnMut(&mut S, &usvg::Node, Affine)>
                 }
             }
             usvg::Node::Text(text) => {
-                render_group(scene, text.flattened(), transform, error_handler);
+                // Like groups, the flattened text's paths have absolute transforms that
+                // already include the text element's own transform.
+                render_group(scene, text.flattened(), base_transform, error_handler);
             }
         }
     }
     scene.end_group();
+}
+
+/// Whether a group without a clip path has to be drawn as a layer of its own.
+fn needs_layer(group: &usvg::Group) -> bool {
+    group.opacity().get() != 1.0
+        || group.blend_mode() != usvg::BlendMode::Normal
+        || group.isolate()
+        || group.mask().is_some()
+        || !group.filters().is_empty()
+}
+
+/// Appends the shapes of a clip path to `out`, transformed by `transform`.
+fn collect_clip(group: &usvg::Group, transform: Affine, out: &mut BezPath) {
+    for node in group.children() {
+        match node {
+            usvg::Node::Path(path) if path.is_visible() => {
+                let mut shape = util::to_bez_path(path);
+                shape.apply_affine(transform);
+                out.extend(shape);
+            }
+            usvg::Node::Group(g) => {
+                collect_clip(g, transform * util::to_affine(&g.transform()), out);
+            }
+            usvg::Node::Text(text) => collect_clip(text.flattened(), transform, out),
+            _ => {}
+        }
+    }
+}
+
+/// Pushes a layer for opacity or blending, clipped to the group's bounding box.
+fn push_bounding_box_layer<S: RenderSink>(
+    scene: &mut S,
+    group: &usvg::Group,
+    blend_mode: BlendMode,
+    alpha: f32,
+    transform: Affine,
+) {
+    let bounding_box = group.layer_bounding_box();
+    let rect = Rect::from_origin_size(
+        (bounding_box.x(), bounding_box.y()),
+        (bounding_box.width() as f64, bounding_box.height() as f64),
+    );
+    scene.push_layer(blend_mode, alpha, transform, &rect);
+}
+
+/// Whether `clip`, in the group's coordinates, is a rectangle on the canvas that contains
+/// everything the group draws, so that clipping changes nothing.
+fn clips_nothing(clip: &BezPath, group: &usvg::Group) -> bool {
+    let mut on_canvas = clip.clone();
+    on_canvas.apply_affine(util::to_affine(&group.abs_transform()));
+    let bounds = on_canvas.bounding_box();
+    let is_rectangle =
+        (on_canvas.area().abs() - bounds.area()).abs() <= 1e-6 * bounds.area().max(1.0);
+    let content = group.abs_stroke_bounding_box();
+    is_rectangle
+        && bounds.x0 <= f64::from(content.left())
+        && bounds.y0 <= f64::from(content.top())
+        && bounds.x1 >= f64::from(content.right())
+        && bounds.y1 >= f64::from(content.bottom())
 }
