@@ -5,32 +5,36 @@
 
 use vello_svg::RenderSink;
 use vello_svg::kurbo::{Affine, Rect, Shape, Stroke};
-use vello_svg::peniko::{BlendMode, Brush, Fill};
+use vello_svg::peniko::{BlendMode, Brush, Compose, Fill};
 
 /// Records the layers pushed (their clip shapes' bounds, in canvas coordinates) and the
 /// number of shapes drawn.
 #[derive(Default)]
 struct Recorder {
     layers: Vec<Rect>,
+    compose: Vec<Compose>,
     drawn: usize,
+    rules: Vec<Fill>,
 }
 
 impl RenderSink for Recorder {
     fn push_layer(
         &mut self,
-        _blend: impl Into<BlendMode>,
+        blend: impl Into<BlendMode>,
         _alpha: f32,
         transform: Affine,
         shape: &impl Shape,
     ) {
+        self.compose.push(blend.into().compose);
         self.layers
             .push(transform.transform_rect_bbox(shape.bounding_box()));
     }
 
     fn pop_layer(&mut self) {}
 
-    fn fill(&mut self, _: Fill, _: Affine, _: &Brush, _: Affine, _: &impl Shape) {
+    fn fill(&mut self, rule: Fill, _: Affine, _: &Brush, _: Affine, _: &impl Shape) {
         self.drawn += 1;
+        self.rules.push(rule);
     }
 
     fn stroke(&mut self, _: &Stroke, _: Affine, _: &Brush, _: Affine, _: &impl Shape) {
@@ -107,7 +111,9 @@ fn clip_path_on_a_transformed_element() {
 }
 
 #[test]
-fn clip_path_with_several_shapes() {
+fn clip_path_with_several_rectangles() {
+    // Rectangles wound the same way can't cancel each other out, so one non-zero path made
+    // of all of them is their union, and one layer is enough.
     let recorder = record(
         r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
             <clipPath id="c">
@@ -119,6 +125,70 @@ fn clip_path_with_several_shapes() {
     );
     assert_eq!(recorder.layers.len(), 1);
     assert_rect_eq(recorder.layers[0], Rect::new(10.0, 10.0, 70.0, 80.0));
+    assert_eq!(recorder.drawn, 1);
+}
+
+#[test]
+fn clip_path_with_several_curved_shapes() {
+    // Curved shapes are drawn into a mask: the content goes into a layer clipped to their
+    // bounds, then a mask layer keeps it only where one of the shapes covers it.
+    let recorder = record(
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <clipPath id="c">
+                <circle cx="20" cy="20" r="10"/>
+                <circle cx="60" cy="70" r="10"/>
+            </clipPath>
+            <g clip-path="url(#c)"><rect width="100" height="100"/></g>
+        </svg>"#,
+    );
+    assert_eq!(recorder.layers.len(), 2);
+    assert_rect_eq(recorder.layers[0], Rect::new(10.0, 10.0, 70.0, 80.0));
+    assert_eq!(recorder.compose, [Compose::SrcOver, Compose::DestIn]);
+    // The content, then the two clip shapes.
+    assert_eq!(recorder.drawn, 3);
+}
+
+#[test]
+fn oppositely_wound_clip_shapes_are_not_merged() {
+    // Merged into one non-zero path, these squares would cancel where they overlap.
+    let recorder = record(
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <clipPath id="c">
+                <path d="M0,0 h60 v60 h-60 Z"/>
+                <path d="M30,30 v60 h60 v-60 Z"/>
+            </clipPath>
+            <g clip-path="url(#c)"><rect width="100" height="100"/></g>
+        </svg>"#,
+    );
+    assert_eq!(recorder.compose, [Compose::SrcOver, Compose::DestIn]);
+    assert_eq!(recorder.drawn, 3);
+}
+
+#[test]
+fn even_odd_clip_rule_is_kept() {
+    let recorder = record(
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <clipPath id="c">
+                <path d="M0,0 h60 v60 h-60 Z M20,20 h20 v20 h-20 Z" clip-rule="evenodd"/>
+            </clipPath>
+            <g clip-path="url(#c)"><rect width="100" height="100"/></g>
+        </svg>"#,
+    );
+    assert_eq!(recorder.compose, [Compose::SrcOver, Compose::DestIn]);
+    assert_eq!(recorder.rules, [Fill::NonZero, Fill::EvenOdd]);
+}
+
+#[test]
+fn clip_with_the_area_of_its_bounds_is_kept() {
+    // A triangle outlined twice has the same area as its bounding square, but it isn't a
+    // rectangle, so clipping to it isn't skipped.
+    let recorder = record(
+        r#"<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+            <clipPath id="c"><path d="M0,0 L100,0 L0,100 Z M0,0 L100,0 L0,100 Z"/></clipPath>
+            <g clip-path="url(#c)"><rect width="100" height="100"/></g>
+        </svg>"#,
+    );
+    assert_eq!(recorder.layers.len(), 1);
 }
 
 #[test]
